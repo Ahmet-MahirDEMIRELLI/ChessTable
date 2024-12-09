@@ -1,4 +1,5 @@
-﻿using ChessTable.Interfaces;
+﻿using ChessTable.Classes;
+using ChessTable.Interfaces;
 
 namespace ChessTable.Repositories
 {
@@ -365,54 +366,23 @@ namespace ChessTable.Repositories
 			return false;
 		}
 
-		public bool IsUnderCheck(byte[,] m, bool checkWhiteKing)        // şah çekiliyorsa true döndürür
+		public bool IsUnderCheck(Board board, bool checkWhiteKing)        // şah çekiliyorsa true döndürür
 		{
-			int i, j;
 			int row = 0, col = 0;
 			if (checkWhiteKing)
 			{
-				i = 7;
-				while (i >= 0)
-				{
-					j = 0;
-					while (j <= 7)
-					{
-						if (m[i, j] == 7)
-						{
-							row = i;    // beyaz şahı bulduk
-							col = j;
-							j = 9;
-							i = -2;
-						}
-						j++;
-					}
-					i--;
-				}
+				row = board.WhiteKing.Row;
+				col = board.WhiteKing.Col;
 			}
 			else
 			{
-				i = 0;
-				while (i <= 7)
-				{
-					j = 0;
-					while (j <= 7)
-					{
-						if (m[i, j] == 14)
-						{
-							row = i;    // siyah şahı bulduk
-							col = j;
-							j = 9;
-							i = 9;
-						}
-						j++;
-					}
-					i++;
-				}
+				row = board.BlackKing.Row;
+				col = board.BlackKing.Col;
 			}
 			ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
-			if (threadCheckRepository.CheckPawn(m, row, col, !checkWhiteKing) && threadCheckRepository.CheckKnight(m, row, col, !checkWhiteKing)
-				&& threadCheckRepository.CheckBishop(m, row, col, !checkWhiteKing) && threadCheckRepository.CheckRook(m, row, col, !checkWhiteKing)
-				&& threadCheckRepository.CheckQueen(m, row, col, !checkWhiteKing))
+			if (threadCheckRepository.CheckPawn(board.BoardMatrix, row, col, !checkWhiteKing) && threadCheckRepository.CheckKnight(board.BoardMatrix, row, col, !checkWhiteKing)
+				&& threadCheckRepository.CheckBishop(board.BoardMatrix, row, col, !checkWhiteKing) && threadCheckRepository.CheckRook(board.BoardMatrix, row, col, !checkWhiteKing)
+				&& threadCheckRepository.CheckQueen(board.BoardMatrix, row, col, !checkWhiteKing))
 			{
 				return false;
 			}
