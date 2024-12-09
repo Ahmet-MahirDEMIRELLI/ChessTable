@@ -461,6 +461,21 @@ namespace ChessTable
 					tableLayoutPanel2.Controls.Add(cellLabel, col, row);
 				}
 			}
+
+			textBox1.Text = game.GameBoard.IsChecked.ToString();
+			textBox2.Text = game.GameBoard.IsMate.ToString();
+			textBox3.Text = game.GameBoard.IsWhiteKingMoved.ToString();
+			textBox4.Text = game.GameBoard.IsBlackKingMoved.ToString();
+			textBox5.Text = game.GameBoard.IsWhiteShortRookMoved.ToString();
+			textBox6.Text = game.GameBoard.IsWhiteLongRookMoved.ToString();
+			textBox7.Text = game.GameBoard.IsBlackShortRookMoved.ToString();
+			textBox8.Text = game.GameBoard.IsBlackLongRookMoved.ToString();
+			textBox9.Text = "[" + game.GameBoard.WhiteKing.Row + ", " + game.GameBoard.WhiteKing.Col + "]";
+			textBox10.Text = "[" + game.GameBoard.BlackKing.Row + ", " + game.GameBoard.BlackKing.Col + "]";
+			textBox11.Text = "[" + game.GameBoard.WhitesCheckers[0].Row + ", " + game.GameBoard.WhitesCheckers[0].Col + "] / [" + game.GameBoard.WhitesCheckers[1].Row + ", " + game.GameBoard.WhitesCheckers[1].Col + "]";
+			textBox12.Text = "[" + game.GameBoard.BlacksCheckers[0].Row + ", " + game.GameBoard.BlacksCheckers[0].Col + "] / [" + game.GameBoard.BlacksCheckers[1].Row + ", " + game.GameBoard.BlacksCheckers[1].Col + "]";
+			textBox13.Text = game.GameBoard.WhitesPoints.ToString();
+			textBox14.Text = game.GameBoard.BlacksPoints.ToString();
 		}
 
 		public static void InitializeBoardMatrix()
