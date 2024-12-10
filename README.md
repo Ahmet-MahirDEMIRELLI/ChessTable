@@ -1,5 +1,4 @@
 # Eksikler
-şah konumu güncellenmiyor
 
 açmazda olan taş açmaza alanı yiyebilir mi diye bakılmıyor
 
