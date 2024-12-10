@@ -128,6 +128,9 @@ namespace ChessTable
 											game.GameBoard.IsWhiteShortRookMoved = true;
 											game.GameBoard.BoardMatrix[7, 5] = 5;
 											game.GameBoard.BoardMatrix[7, 7] = 0;
+											// Şahın yerini güncelle
+											game.GameBoard.WhiteKing.Row = 7;
+											game.GameBoard.WhiteKing.Col = 6;
 										}
 										else
 										{
@@ -143,6 +146,9 @@ namespace ChessTable
 											game.GameBoard.IsBlackShortRookMoved = true;
 											game.GameBoard.BoardMatrix[0, 5] = 12;
 											game.GameBoard.BoardMatrix[0, 7] = 0;
+											// Şahın yerini güncelle
+											game.GameBoard.BlackKing.Row = 0;
+											game.GameBoard.BlackKing.Col = 6;
 										}
 									}
 									else
@@ -161,6 +167,9 @@ namespace ChessTable
 											game.GameBoard.IsWhiteLongRookMoved = true;
 											game.GameBoard.BoardMatrix[7, 3] = 5;
 											game.GameBoard.BoardMatrix[7, 0] = 0;
+											// Şahın yerini güncelle
+											game.GameBoard.WhiteKing.Row = 7;
+											game.GameBoard.WhiteKing.Col = 2;
 										}
 										else
 										{
@@ -176,11 +185,25 @@ namespace ChessTable
 											game.GameBoard.IsBlackLongRookMoved = true;
 											game.GameBoard.BoardMatrix[0, 3] = 12;
 											game.GameBoard.BoardMatrix[0, 0] = 0;
+											// Şahın yerini güncelle
+											game.GameBoard.BlackKing.Row = 0;
+											game.GameBoard.BlackKing.Col = 2;
 										}
 									}
 								}
 								else if(move.Message.Contains("King Moved"))
 								{
+									// Şahın yerini güncelle
+									if (isWhitesMove)
+									{
+										game.GameBoard.WhiteKing.Row = row;
+										game.GameBoard.WhiteKing.Col = col;
+									}
+									else
+									{
+										game.GameBoard.BlackKing.Row = row;
+										game.GameBoard.BlackKing.Col = col;
+									}
 									if (!game.GameBoard.IsWhiteKingMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
 									{
 										game.GameBoard.IsWhiteKingMoved = true;
