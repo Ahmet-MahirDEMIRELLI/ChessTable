@@ -95,11 +95,13 @@ namespace ChessTable
 									{
 										whites2List[0, 0] = -1;
 										whites2List[0, 1] = -1;
+										game.GameBoard.WhitesPoints--;  // Beyazın puanından piyonu düş
 									}
 									else if (game.GameBoard.BoardMatrix[eatenRow, eatenCol] == black2Pawn)
 									{
 										blacks9List[0, 0] = -1;
 										blacks9List[0, 1] = -1;
+										game.GameBoard.BlacksPoints--;  // Siyahın puanından piyonu düş
 									}
 									game.GameBoard.BoardMatrix[eatenRow, eatenCol] = 0;
 									// Yenilen taşı tahtadan temizle
@@ -241,6 +243,46 @@ namespace ChessTable
 							}
 							else if(game.GameBoard.BoardMatrix[row, col] != 0)   // taş yenecek
 							{
+								// Yenilecek olan taşın puanını düş
+								if (isWhitesMove)
+								{
+									if(game.GameBoard.BoardMatrix[row, col] <= 9)  // Siyah piyon
+									{
+										game.GameBoard.BlacksPoints--;
+									}
+									else if(game.GameBoard.BoardMatrix[row, col] <= 11) // at veya fil
+									{
+										game.GameBoard.BlacksPoints -= 3;
+									}
+									else if (game.GameBoard.BoardMatrix[row, col] == 12) // kale
+									{
+										game.GameBoard.BlacksPoints -= 5;
+									}
+									else
+									{
+										game.GameBoard.BlacksPoints -= 9;
+									}
+								}
+								else
+								{
+									if (game.GameBoard.BoardMatrix[row, col] <= 2)  // Beyaz piyon
+									{
+										game.GameBoard.WhitesPoints--;
+									}
+									else if (game.GameBoard.BoardMatrix[row, col] <= 4) // at veya fil
+									{
+										game.GameBoard.WhitesPoints -= 3;
+									}
+									else if (game.GameBoard.BoardMatrix[row, col] == 5) // kale
+									{
+										game.GameBoard.WhitesPoints -= 5;
+									}
+									else
+									{
+										game.GameBoard.WhitesPoints -= 9;
+									}
+								}
+
 								if (game.GameBoard.BoardMatrix[row, col] == white2Pawn)         // beyazın 2 sürülmüş piyonu yenecek
 								{
 									whites2List[0, 0] = -1;
