@@ -6,7 +6,7 @@ IsChecked güncellenmiyor
 
 şah çekildiyse araya girebilir mi diye bakılmıyor
 
-Puan güncellenmiyor
+Upgrade işlemi yapılmıyor
 
 50 hamle kontrol edilmiyor
 
