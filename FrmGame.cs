@@ -361,6 +361,52 @@ namespace ChessTable
 						pieceToMoveImage = null;
 						// validMoves temizle
 						validMoves = null;
+						// şah çekildi mi kontrolü
+						ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
+						if (isWhitesMove)
+						{
+							switch(game.GameBoard.BoardMatrix[row, col])
+							{
+								case 1:
+								case 2:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+									break;
+								case 3:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+									break;
+								case 4:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+									break;
+								case 5:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+									break;
+								case 6:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+									break;
+							}
+						}
+						else
+						{
+							switch (game.GameBoard.BoardMatrix[row, col])
+							{
+								case 8:
+								case 9:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+									break;
+								case 10:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+									break;
+								case 11:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+									break;
+								case 12:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+									break;
+								case 13:
+									game.GameBoard.IsChecked = !threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+									break;
+							}
+						}
 						// hamle sırasını değiştir
 						isWhitesMove = !isWhitesMove;
 						formInstance.MatrixToPanel();
