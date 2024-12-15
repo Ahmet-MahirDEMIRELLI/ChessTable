@@ -2,8 +2,6 @@
 
 açmazda olan taş açmaza alanı yiyebilir mi diye bakılmıyor
 
-IsChecked güncellenmiyor
-
 şah çekildiyse araya girebilir mi diye bakılmıyor
 
 Upgrade işlemi yapılmıyor
