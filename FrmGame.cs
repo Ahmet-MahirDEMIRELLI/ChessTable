@@ -241,7 +241,8 @@ namespace ChessTable
 									}
 								}
 							}
-							else if(game.GameBoard.BoardMatrix[row, col] != 0)   // taş yenecek
+
+							if(game.GameBoard.BoardMatrix[row, col] != 0)   // taş yenecek
 							{
 								// Yenilecek olan taşın puanını düş
 								if (isWhitesMove)
