@@ -78,6 +78,8 @@ namespace ChessTable
 						move = IsMoveValid(row, col);
 						if (move != null)
 						{
+							// şah çekilme durumunu temizle
+							game.GameBoard.IsChecked = false;
 							if(move.Message != "") // Mesaj = "Upgrade", "Eats row,col", "ShortCastle", "Long Castle", "White King Moved", "Black King Moved" olabilir
 							{
 								if(move.Message == "Upgrade")
