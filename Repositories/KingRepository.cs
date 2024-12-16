@@ -477,9 +477,9 @@ namespace ChessTable.Repositories
 			int counter = 0;
 			foreach (Square square in squares)
 			{
-				if (threadCheckRepository.CheckPawn(m, square.Row, square.Col, !isWhite) && threadCheckRepository.CheckKnight(m, square.Row, square.Col, !isWhite)
-				&& threadCheckRepository.CheckBishop(m, square.Row, square.Col, !isWhite) && threadCheckRepository.CheckRook(m, square.Row, square.Col, !isWhite)
-				&& threadCheckRepository.CheckQueen(m, square.Row, square.Col, !isWhite) && threadCheckRepository.CheckKing(m, square.Row, square.Col, !isWhite))
+				if (threadCheckRepository.CheckPawn(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckKnight(m, square.Row, square.Col, !isWhite).IsCheck
+				&& threadCheckRepository.CheckBishop(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckRook(m, square.Row, square.Col, !isWhite).IsCheck
+				&& threadCheckRepository.CheckQueen(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckKing(m, square.Row, square.Col, !isWhite))
 				{
 					counter++;
 				}
@@ -490,7 +490,7 @@ namespace ChessTable.Repositories
 				return true;
 			}
 			squares = new List<Square>();
-			return false;       
+			return false;      
 		}
 	}
 }

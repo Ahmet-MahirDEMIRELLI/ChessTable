@@ -5,8 +5,12 @@ namespace ChessTable.Repositories
 {
 	public class ThreadCheckRepository : IThreadCheckDal
 	{
-		public bool CheckBishop(byte[,] m, int row, int col, bool checkWhitePieces)              // Eğer kareyi tehdit etmiyorsa true döndürür
+		public Checker CheckBishop(byte[,] m, int row, int col, bool checkWhitePieces)              // Eğer kareyi tehdit etmiyorsa true döndürür
 		{
+			Checker checker = new Checker();
+			checker.IsCheck = true;
+			checker.Row = -1;
+			checker.Col = -1;
 			if (checkWhitePieces)
 			{
 				int i = row - 1, j = col - 1;
@@ -16,9 +20,11 @@ namespace ChessTable.Repositories
 					{
 						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
 					}
-					else if (m[i, j] == 4 || m[i, j] == 6)  // beyaz fil veya vezir var
+					else if (m[i, j] == 4)  // beyaz fil var
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 					j--;
@@ -32,9 +38,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 4 || m[i, j] == 6)
+					else if (m[i, j] == 4)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 					j++;
@@ -48,9 +56,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 4 || m[i, j] == 6)
+					else if (m[i, j] == 4)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 					j--;
@@ -64,9 +74,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 4 || m[i, j] == 6)
+					else if (m[i, j] == 4)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 					j++;
@@ -81,9 +93,11 @@ namespace ChessTable.Repositories
 					{
 						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
 					}
-					else if (m[i, j] == 11 || m[i, j] == 13)  // siyah fil veya vezir var
+					else if (m[i, j] == 11)  // siyah fil var
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 					j--;
@@ -97,9 +111,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 11 || m[i, j] == 13)
+					else if (m[i, j] == 11)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 					j++;
@@ -113,9 +129,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 11 || m[i, j] == 13)
+					else if (m[i, j] == 11)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 					j--;
@@ -129,15 +147,18 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 11 || m[i, j] == 13)
+					else if (m[i, j] == 11)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 					j++;
 				}
 			}
-			return true;
+			checker.IsCheck = false;
+			return checker;
 		}
 
 		public bool CheckKing(byte[,] m, int row, int col, bool checkWhitePieces)
@@ -167,8 +188,12 @@ namespace ChessTable.Repositories
 			return true;
 		}
 
-		public bool CheckKnight(byte[,] m, int row, int col, bool checkWhitePieces)
+		public Checker CheckKnight(byte[,] m, int row, int col, bool checkWhitePieces)
 		{
+			Checker checker = new Checker();
+			checker.IsCheck = true;
+			checker.Row = -1;
+			checker.Col = -1;
 			int[,] squares = { { row - 2, col + 1 }, { row - 1, col + 2 }, { row + 1, col + 2 }, { row + 2, col + 1 }, { row - 2, col - 1 }, { row - 1, col - 2 }, { row + 1, col - 2 }, { row + 2, col - 1 } };
 			// maximum 8 kare var
 			if (checkWhitePieces)
@@ -177,7 +202,9 @@ namespace ChessTable.Repositories
 				{
 					if (CheckSquare(squares[i, 0], squares[i, 1]) && m[squares[i, 0], squares[i, 1]] == 3)
 					{
-						return false;
+						checker.Row = squares[i, 0];
+						checker.Col = squares[i, 1];
+						return checker;
 					}
 				}
 			}
@@ -187,26 +214,37 @@ namespace ChessTable.Repositories
 				{
 					if (CheckSquare(squares[i, 0], squares[i, 1]) && m[squares[i, 0], squares[i, 1]] == 10)
 					{
-						return false;
+						checker.Row = squares[i, 0];
+						checker.Col = squares[i, 1];
+						return checker;
 					}
 				}
 			}
-			return true;
+			checker.IsCheck = false;
+			return checker;
 		}
 
-		public bool CheckPawn(byte[,] m, int row, int col, bool checkWhitePieces)
+		public Checker CheckPawn(byte[,] m, int row, int col, bool checkWhitePieces)
 		{
+			Checker checker = new Checker();
+			checker.IsCheck = true;
+			checker.Row = -1;
+			checker.Col = -1;
 			if (checkWhitePieces)
 			{
 				// sol alt çapraz
 				if (row + 1 <= 7 && col - 1 >= 0 && (m[row + 1, col - 1] == 1 || m[row + 1, col - 1] == 2))       // beyaz piyon 1  veya 2 değeri alabilir
 				{
-					return false;
+					checker.Row = row + 1;
+					checker.Col = col - 1;
+					return checker;
 				}
 				// sağ alt çapraz
 				if (row + 1 <= 7 && col + 1 <= 7 && (m[row + 1, col + 1] == 1 || m[row + 1, col + 1] == 2))       // beyaz piyon 1  veya 2 değeri alabilir
 				{
-					return false;
+					checker.Row = row + 1;
+					checker.Col = col + 1;
+					return checker;
 				}
 			}
 			else
@@ -214,36 +252,115 @@ namespace ChessTable.Repositories
 				// sol üst çapraz
 				if (row - 1 >= 0 && col - 1 >= 0 && (m[row - 1, col - 1] == 8 || m[row - 1, col - 1] == 9))       // siyah piyon 8  veya 9 değeri alabilir
 				{
-					return false;
+					checker.Row = row - 1;
+					checker.Col = col - 1;
+					return checker;
 				}
 				// sağ üst çapraz
 				if (row - 1 >= 0 && col + 1 <= 7 && (m[row - 1, col + 1] == 8 || m[row - 1, col + 1] == 9))       // beyaz piyon 8  veya 9 değeri alabilir
 				{
-					return false;
+					checker.Row = row - 1;
+					checker.Col = col + 1;
+					return checker;
 				}
 			}
-			return true;
+			checker.IsCheck = false;
+			return checker;
 		}
 
-		public bool CheckQueen(byte[,] m, int row, int col, bool checkWhitePieces)
+		public Checker CheckQueen(byte[,] m, int row, int col, bool checkWhitePieces)
 		{
-			return CheckBishop(m, row, col, checkWhitePieces) && CheckRook(m, row, col, checkWhitePieces);
-		}
-
-		public bool CheckRook(byte[,] m, int row, int col, bool checkWhitePieces)
-		{
+			Checker checker = new Checker();
+			checker.IsCheck = true;
+			checker.Row = -1;
+			checker.Col = -1;
 			if (checkWhitePieces)
 			{
-				int i = row, j = col - 1;
+				// fil özelliğini kontrol et
+				int i = row - 1, j = col - 1;
+				while (i >= 0 && j >= 0)            // sol üst çapraz
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
+					}
+					else if (m[i, j] == 6)  // beyaz vezir var
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+					j--;
+				}
+
+				i = row - 1;
+				j = col + 1;
+				while (i >= 0 && j <= 7)            // sağ üst çapraz
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 6)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+					j++;
+				}
+
+				i = row + 1;
+				j = col - 1;
+				while (i <= 7 && j >= 0)            // sol alt çapraz
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 6)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+					j--;
+				}
+
+				i = row + 1;
+				j = col + 1;
+				while (i <= 7 && j <= 7)            // sağ alt çapraz
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 6)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+					j++;
+				}
+				// kale özelliğini kontrol et
+				i = row;
+				j = col - 1;
 				while (j >= 0)            // sol
 				{
 					if (m[i, j] >= 8)      // arayı kesen siyah taş var
 					{
 						break;
 					}
-					else if (m[i, j] == 5 || m[i, j] == 6) // beyaz kale veya vezir var
+					else if (m[i, j] == 6) // beyaz vezir var
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					j--;
 				}
@@ -256,9 +373,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 5 || m[i, j] == 6)
+					else if (m[i, j] == 6)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					j++;
 				}
@@ -271,9 +390,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 5 || m[i, j] == 6)
+					else if (m[i, j] == 6)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 				}
@@ -286,9 +407,232 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 5 || m[i, j] == 6)
+					else if (m[i, j] == 6)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+				}
+			}
+			else
+			{
+				// fil özelliğini kontrol et
+				int i = row - 1, j = col - 1;
+				while (i >= 0 && j >= 0)            // sol üst çapraz
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
+					}
+					else if ( m[i, j] == 13)  // siyah vezir var
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+					j--;
+				}
+
+				i = row - 1;
+				j = col + 1;
+				while (i >= 0 && j <= 7)            // sağ üst çapraz
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+					j++;
+				}
+
+				i = row + 1;
+				j = col - 1;
+				while (i <= 7 && j >= 0)            // sol alt çapraz
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+					j--;
+				}
+
+				i = row + 1;
+				j = col + 1;
+				while (i <= 7 && j <= 7)            // sağ alt çapraz
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+					j++;
+				}
+				// kale özelliğini kontrol et
+				i = row;
+				j = col - 1;
+				while (j >= 0)            // sol
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13) // siyah vezir var
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					j--;
+				}
+
+				i = row;
+				j = col + 1;
+				while (j <= 7)            // sağ
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					j++;
+				}
+
+				i = row - 1;
+				j = col;
+				while (i >= 0)            // yukarı
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+				}
+
+				i = row + 1;
+				j = col;
+				while (i <= 7)            // aşağı
+				{
+					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 13)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i++;
+				}
+			}
+			checker.IsCheck = false;
+			return checker;
+		}
+
+		public Checker CheckRook(byte[,] m, int row, int col, bool checkWhitePieces)
+		{
+			Checker checker = new Checker();
+			checker.IsCheck = true;
+			checker.Row = -1;
+			checker.Col = -1;
+			if (checkWhitePieces)
+			{
+				int i = row, j = col - 1;
+				while (j >= 0)            // sol
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 5) // beyaz kale var
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					j--;
+				}
+
+				i = row;
+				j = col + 1;
+				while (j <= 7)            // sağ
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 5)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					j++;
+				}
+
+				i = row - 1;
+				j = col;
+				while (i >= 0)            // yukarı
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 5)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
+					}
+					i--;
+				}
+
+				i = row + 1;
+				j = col;
+				while (i <= 7)            // aşağı
+				{
+					if (m[i, j] >= 8)      // arayı kesen siyah taş var
+					{
+						break;
+					}
+					else if (m[i, j] == 5)
+					{
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 				}
@@ -302,9 +646,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 12 || m[i, j] == 13) // siyah kale veya vezir var
+					else if (m[i, j] == 12) // siyah kale veya vezir var
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					j--;
 				}
@@ -317,9 +663,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 12 || m[i, j] == 13)
+					else if (m[i, j] == 12)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					j++;
 				}
@@ -332,9 +680,11 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 12 || m[i, j] == 13)
+					else if (m[i, j] == 12)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i--;
 				}
@@ -347,14 +697,17 @@ namespace ChessTable.Repositories
 					{
 						break;
 					}
-					else if (m[i, j] == 12 || m[i, j] == 13)
+					else if (m[i, j] == 12)
 					{
-						return false;
+						checker.Row = i;
+						checker.Col = j;
+						return checker;
 					}
 					i++;
 				}
 			}
-			return true;
+			checker.IsCheck = false;
+			return checker;
 		}
 
 		public bool CheckSquare(int row, int col)
@@ -366,28 +719,6 @@ namespace ChessTable.Repositories
 			return false;
 		}
 
-		public bool IsUnderCheck(Board board, bool checkWhiteKing)        // şah çekiliyorsa true döndürür
-		{
-			int row = 0, col = 0;
-			if (checkWhiteKing)
-			{
-				row = board.WhiteKing.Row;
-				col = board.WhiteKing.Col;
-			}
-			else
-			{
-				row = board.BlackKing.Row;
-				col = board.BlackKing.Col;
-			}
-			ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
-			if (threadCheckRepository.CheckPawn(board.BoardMatrix, row, col, !checkWhiteKing) && threadCheckRepository.CheckKnight(board.BoardMatrix, row, col, !checkWhiteKing)
-				&& threadCheckRepository.CheckBishop(board.BoardMatrix, row, col, !checkWhiteKing) && threadCheckRepository.CheckRook(board.BoardMatrix, row, col, !checkWhiteKing)
-				&& threadCheckRepository.CheckQueen(board.BoardMatrix, row, col, !checkWhiteKing))
-			{
-				return false;
-			}
-			return true;
-		}
 		public bool IsMovable(byte[,] m, int pieceRow, int pieceColumn, int kingRow, int kingCol, bool isWhite)
 		{
 			if (isWhite)

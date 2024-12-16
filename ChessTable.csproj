@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Board.cs" />
+    <Compile Include="Classes\Checker.cs" />
     <Compile Include="Classes\Game.cs" />
     <Compile Include="Classes\Move.cs" />
     <Compile Include="Classes\Square.cs" />
