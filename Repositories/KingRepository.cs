@@ -38,7 +38,7 @@ namespace ChessTable.Repositories
 							Col = 5,
 						};
 						squaresToCheck.Add(square);
-						if (IsUnderThread(matrix, squaresToCheck, isWhite)) // aradaki kareler tehdit altında değil
+						if (!IsUnderThread(matrix, squaresToCheck, isWhite)) // aradaki kareler tehdit altında değil
 						{
 							move = new Move()
 							{
@@ -69,7 +69,7 @@ namespace ChessTable.Repositories
 							Col = 3,
 						};
 						squaresToCheck.Add(square);
-						if (IsUnderThread(matrix, squaresToCheck, isWhite))
+						if (!IsUnderThread(matrix, squaresToCheck, isWhite))
 						{
 							move = new Move()
 							{
@@ -91,7 +91,7 @@ namespace ChessTable.Repositories
 						Col = column+1,
 					};
 					squaresToCheck.Add(square);
-					if(IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if(!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -111,7 +111,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -131,7 +131,7 @@ namespace ChessTable.Repositories
 						Col = column,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -151,7 +151,7 @@ namespace ChessTable.Repositories
 						Col = column,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -171,7 +171,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -191,7 +191,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -211,7 +211,7 @@ namespace ChessTable.Repositories
 						Col = column + 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -231,7 +231,7 @@ namespace ChessTable.Repositories
 						Col = column + 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -262,7 +262,7 @@ namespace ChessTable.Repositories
 							Col = 5,
 						};
 						squaresToCheck.Add(square);
-						if (IsUnderThread(matrix, squaresToCheck, isWhite)) // aradaki kareler tehdit altında değil
+						if (!IsUnderThread(matrix, squaresToCheck, isWhite)) // aradaki kareler tehdit altında değil
 						{
 							move = new Move()
 							{
@@ -293,7 +293,7 @@ namespace ChessTable.Repositories
 							Col = 3,
 						};
 						squaresToCheck.Add(square);
-						if (IsUnderThread(matrix, squaresToCheck, isWhite))
+						if (!IsUnderThread(matrix, squaresToCheck, isWhite))
 						{
 							move = new Move()
 							{
@@ -315,7 +315,7 @@ namespace ChessTable.Repositories
 						Col = column + 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -335,7 +335,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -355,7 +355,7 @@ namespace ChessTable.Repositories
 						Col = column,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -375,7 +375,7 @@ namespace ChessTable.Repositories
 						Col = column,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -395,7 +395,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -415,7 +415,7 @@ namespace ChessTable.Repositories
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -435,7 +435,7 @@ namespace ChessTable.Repositories
 						Col = column + 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -455,7 +455,7 @@ namespace ChessTable.Repositories
 						Col = column + 1,
 					};
 					squaresToCheck.Add(square);
-					if (IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
+					if (!IsUnderThread(matrix, squaresToCheck, isWhite))  // kare korunmada değil
 					{
 						move = new Move()
 						{
@@ -471,15 +471,15 @@ namespace ChessTable.Repositories
 			return possibleMoves;
 		}
 		
-		private bool IsUnderThread(byte[,] m,  List<Square> squares, bool isWhite)
+		private static bool IsUnderThread(byte[,] m,  List<Square> squares, bool isWhite)
 		{
 			ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
 			int counter = 0;
 			foreach (Square square in squares)
 			{
-				if (threadCheckRepository.CheckPawn(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckKnight(m, square.Row, square.Col, !isWhite).IsCheck
-				&& threadCheckRepository.CheckBishop(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckRook(m, square.Row, square.Col, !isWhite).IsCheck
-				&& threadCheckRepository.CheckQueen(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckKing(m, square.Row, square.Col, !isWhite))
+				if (!threadCheckRepository.CheckPawn(m, square.Row, square.Col, !isWhite).IsCheck && !threadCheckRepository.CheckKnight(m, square.Row, square.Col, !isWhite).IsCheck
+				&& !threadCheckRepository.CheckBishop(m, square.Row, square.Col, !isWhite).IsCheck && !threadCheckRepository.CheckRook(m, square.Row, square.Col, !isWhite).IsCheck
+				&& !threadCheckRepository.CheckQueen(m, square.Row, square.Col, !isWhite).IsCheck && threadCheckRepository.CheckKing(m, square.Row, square.Col, !isWhite))
 				{
 					counter++;
 				}
@@ -487,10 +487,10 @@ namespace ChessTable.Repositories
 			if(counter == squares.Count)     // her eleman için koşulları geçtiyse tüm kareler güvende
 			{
 				squares = new List<Square>();
-				return true;
+				return false;
 			}
 			squares = new List<Square>();
-			return false;      
+			return true;      
 		}
 	}
 }
