@@ -71,7 +71,7 @@
     <Compile Include="Repositories\BishopRepository.cs" />
     <Compile Include="Repositories\KingRepository.cs" />
     <Compile Include="Repositories\KnightRepository.cs" />
-    <Compile Include="Repositories\PownRepository.cs" />
+    <Compile Include="Repositories\PawnRepository.cs" />
     <Compile Include="Repositories\QueenRepository.cs" />
     <Compile Include="Repositories\RookRepository.cs" />
     <Compile Include="Repositories\ThreadCheckRepository.cs" />

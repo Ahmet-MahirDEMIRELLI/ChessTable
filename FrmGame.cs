@@ -562,7 +562,7 @@ namespace ChessTable
 		public static void HiglightPossibleMoves(Board board, int row, int col, TableLayoutPanel panel)
 		{
 			List<Move> moves = new List<Move>();
-			PownRepository pownRepo = new PownRepository();
+			PawnRepository pownRepo = new PawnRepository();
 			KnightRepository knightRepo = new KnightRepository();
 			BishopRepository bishopRepo = new BishopRepository();
 			RookRepository rookRepo = new RookRepository();
