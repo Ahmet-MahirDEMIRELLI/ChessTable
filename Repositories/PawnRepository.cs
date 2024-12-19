@@ -207,7 +207,7 @@ namespace ChessTable.Repositories
 									{
 										Column = column - 1,
 										Row = row - 1,
-										Message = $"Eats {row},{column - 1}"
+										Message = $"Enpassant {row},{column - 1}"
 									};
 									possibleMoves.Add(move);
 								}
@@ -217,7 +217,7 @@ namespace ChessTable.Repositories
 									{
 										Column = column + 1,
 										Row = row - 1,
-										Message = $"Eats {row},{column + 1}"
+										Message = $"Enpassant {row},{column + 1}"
 									};
 									possibleMoves.Add(move);
 								}
@@ -228,7 +228,7 @@ namespace ChessTable.Repositories
 								{
 									Column = column - 1,
 									Row = row - 1,
-									Message = $"Eats {row},{column - 1}"
+									Message = $"Enpassant {row},{column - 1}"
 								};
 								possibleMoves.Add(move);
 							}
@@ -238,7 +238,7 @@ namespace ChessTable.Repositories
 								{
 									Column = column + 1,
 									Row = row - 1,
-									Message = $"Eats {row},{column + 1}"
+									Message = $"Enpassant {row},{column + 1}"
 								};
 								possibleMoves.Add(move);
 							}
@@ -297,7 +297,7 @@ namespace ChessTable.Repositories
 									{
 										Column = column - 1,
 										Row = row + 1,
-										Message = $"Eats {row},{column - 1}"
+										Message = $"Enpassant {row},{column - 1}"
 									};
 									possibleMoves.Add(move);
 								}
@@ -307,7 +307,7 @@ namespace ChessTable.Repositories
 									{
 										Column = column + 1,
 										Row = row + 1,
-										Message = $"Eats {row},{column + 1}"
+										Message = $"Enpassant {row},{column + 1}"
 									};
 									possibleMoves.Add(move);
 								}
@@ -318,7 +318,7 @@ namespace ChessTable.Repositories
 								{
 									Column = column - 1,
 									Row = row + 1,
-									Message = $"Eats {row},{column - 1}"
+									Message = $"Enpassant {row},{column - 1}"
 								};
 								possibleMoves.Add(move);
 							}
@@ -328,7 +328,7 @@ namespace ChessTable.Repositories
 								{
 									Column = column + 1,
 									Row = row + 1,
-									Message = $"Eats {row},{column + 1}"
+									Message = $"Enpassant {row},{column + 1}"
 								};
 								possibleMoves.Add(move);
 							}

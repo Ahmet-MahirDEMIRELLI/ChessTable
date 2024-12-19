@@ -87,14 +87,14 @@ namespace ChessTable
 									Panel upgradePanel = (Panel)tableLayoutPanel.GetControlFromPosition(col, row);
 									HandleUpgrade(row, col, pieceToMoveRow, pieceToMoveCol, upgradePanel, pieceToMovePanel);
 								}
-								else if (move.Message.Contains("Eats"))
+								else if (move.Message.Contains("Enpassant"))
 								{
 									var parts = move.Message.Split(' ');    // parts[0] = Eats part[1] = row,col
 									var coordinates = parts[1].Split(',');
 									int eatenRow = int.Parse(coordinates[0]);
 									int eatenCol = int.Parse(coordinates[1]);
 									Panel eatenPanel = (Panel)tableLayoutPanel.GetControlFromPosition(eatenCol, eatenRow);
-									HandleEats(eatenRow, eatenCol, eatenPanel);
+									HandleEnpassant(eatenRow, eatenCol, eatenPanel);
 								}
 								else if (move.Message.Contains("Castle"))
 								{
@@ -570,7 +570,7 @@ namespace ChessTable
 			}
 		}
 
-		private static void HandleEats(int eatenRow, int eatenCol, Panel eatenPanel)
+		private static void HandleEnpassant(int eatenRow, int eatenCol, Panel eatenPanel)
 		{
 			// Yenilen taşı matristen temizle
 			if (game.GameBoard.BoardMatrix[eatenRow, eatenCol] == white2Pawn)  // beyazın 2 kare oynanmış piyonu yendi
