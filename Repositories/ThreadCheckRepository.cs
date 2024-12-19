@@ -16,15 +16,15 @@ namespace ChessTable.Repositories
 				int i = row - 1, j = col - 1;
 				while (i >= 0 && j >= 0)            // sol üst çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
-					}
-					else if (m[i, j] == 4)  // beyaz fil var
+					if (m[i, j] == 4)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j--;
@@ -34,15 +34,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i >= 0 && j <= 7)            // sağ üst çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 4)
+					if (m[i, j] == 4)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j++;
@@ -52,15 +52,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (i <= 7 && j >= 0)            // sol alt çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 4)
+					if (m[i, j]  == 4)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)		// arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j--;
@@ -70,15 +70,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i <= 7 && j <= 7)            // sağ alt çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 4)
+					if (m[i, j]  == 4)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)		// arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j++;
@@ -89,15 +89,15 @@ namespace ChessTable.Repositories
 				int i = row - 1, j = col - 1;
 				while (i >= 0 && j >= 0)            // sol üst çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
-					}
-					else if (m[i, j] == 11)  // siyah fil var
+					if (m[i, j] == 11)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j--;
@@ -107,15 +107,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i >= 0 && j <= 7)            // sağ üst çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 11)
+					if (m[i, j] == 11)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j++;
@@ -125,15 +125,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (i <= 7 && j >= 0)            // sol alt çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 11)
+					if (m[i, j] == 11)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j--;
@@ -143,15 +143,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i <= 7 && j <= 7)            // sağ alt çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 11)
+					if (m[i, j] == 11)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)      // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j++;
@@ -280,15 +280,15 @@ namespace ChessTable.Repositories
 				int i = row - 1, j = col - 1;
 				while (i >= 0 && j >= 0)            // sol üst çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
-					}
-					else if (m[i, j] == 6)  // beyaz vezir var
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j--;
@@ -298,15 +298,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i >= 0 && j <= 7)            // sağ üst çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j++;
@@ -316,15 +316,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (i <= 7 && j >= 0)            // sol alt çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j--;
@@ -334,15 +334,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i <= 7 && j <= 7)            // sağ alt çapraz
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j++;
@@ -352,15 +352,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (j >= 0)            // sol
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6) // beyaz vezir var
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					j--;
 				}
@@ -369,15 +369,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (j <= 7)            // sağ
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					j++;
 				}
@@ -386,15 +386,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i >= 0)            // yukarı
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 				}
@@ -403,15 +403,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i <= 7)            // aşağı
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 6)
+					if (m[i, j] == 6)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)  // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 				}
@@ -422,15 +422,15 @@ namespace ChessTable.Repositories
 				int i = row - 1, j = col - 1;
 				while (i >= 0 && j >= 0)            // sol üst çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break; // arayı kesen taş varsa bu çapraza bakmaya gerek yok
-					}
-					else if ( m[i, j] == 13)  // siyah vezir var
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j--;
@@ -440,15 +440,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i >= 0 && j <= 7)            // sağ üst çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 					j++;
@@ -458,15 +458,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (i <= 7 && j >= 0)            // sol alt çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j--;
@@ -476,15 +476,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (i <= 7 && j <= 7)            // sağ alt çapraz
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 					j++;
@@ -494,15 +494,15 @@ namespace ChessTable.Repositories
 				j = col - 1;
 				while (j >= 0)            // sol
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13) // siyah vezir var
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					j--;
 				}
@@ -511,15 +511,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (j <= 7)            // sağ
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					j++;
 				}
@@ -528,15 +528,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i >= 0)            // yukarı
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 				}
@@ -545,15 +545,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i <= 7)            // aşağı
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 13)
+					if (m[i, j] == 13)
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0)       // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 				}
@@ -573,15 +573,15 @@ namespace ChessTable.Repositories
 				int i = row, j = col - 1;
 				while (j >= 0)            // sol
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 5) // beyaz kale var
+					if (m[i, j] == 5)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					j--;
 				}
@@ -590,15 +590,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (j <= 7)            // sağ
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 5)
+					if (m[i, j] == 5)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					j++;
 				}
@@ -607,15 +607,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i >= 0)            // yukarı
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 5)
+					if (m[i, j] == 5)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 				}
@@ -624,15 +624,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i <= 7)            // aşağı
 				{
-					if (m[i, j] >= 8)      // arayı kesen siyah taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 5)
+					if (m[i, j] == 5)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 				}
@@ -642,15 +642,15 @@ namespace ChessTable.Repositories
 				int i = row, j = col - 1;
 				while (j >= 0)            // sol
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 12) // siyah kale veya vezir var
+					if (m[i, j] == 12)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					j--;
 				}
@@ -659,15 +659,15 @@ namespace ChessTable.Repositories
 				j = col + 1;
 				while (j <= 7)            // sağ
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 12)
+					if (m[i, j] == 12)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					j++;
 				}
@@ -676,15 +676,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i >= 0)            // yukarı
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 12)
+					if (m[i, j] == 12)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					i--;
 				}
@@ -693,15 +693,15 @@ namespace ChessTable.Repositories
 				j = col;
 				while (i <= 7)            // aşağı
 				{
-					if (m[i, j] != 0 && m[i, j] <= 7)      // arayı kesen beyaz taş var
-					{
-						break;
-					}
-					else if (m[i, j] == 12)
+					if (m[i, j] == 12)      // arayı kesen siyah taş var
 					{
 						checker.Row = i;
 						checker.Col = j;
 						return checker;
+					}
+					else if (m[i, j] != 0) // arayı kesen taş var
+					{
+						break;
 					}
 					i++;
 				}

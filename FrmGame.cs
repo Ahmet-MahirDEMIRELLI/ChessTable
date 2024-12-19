@@ -80,7 +80,7 @@ namespace ChessTable
 						{
 							// şah çekilme durumunu temizle
 							game.GameBoard.IsChecked = false;
-							if(move.Message != "") // Mesaj = "Upgrade", "Eats row,col", "ShortCastle", "Long Castle", "White King Moved", "Black King Moved" olabilir
+							if(move.Message != "") // Mesaj = "Upgrade", "Enpassant row,col", "ShortCastle", "Long Castle", "White King Moved", "Black King Moved" olabilir
 							{
 								if(move.Message == "Upgrade")
 								{
@@ -89,7 +89,7 @@ namespace ChessTable
 								}
 								else if (move.Message.Contains("Enpassant"))
 								{
-									var parts = move.Message.Split(' ');    // parts[0] = Eats part[1] = row,col
+									var parts = move.Message.Split(' ');    // parts[0] = Enpassant part[1] = row,col
 									var coordinates = parts[1].Split(',');
 									int eatenRow = int.Parse(coordinates[0]);
 									int eatenCol = int.Parse(coordinates[1]);
@@ -128,7 +128,7 @@ namespace ChessTable
 								blacks9List[0, 1] = -1;
 							}
 
-							if(move.Message != "Upgrade") // Upgrade fonksiyonu hamle yapma işini hallediyor
+							if(move.Message != "Upgrade") // Upgrade fonksiyonu hamle yapma işini kendi hallediyor
 							{
 								MakeTheMove(clickedPanel, pieceToMoveImage, pieceToMovePanel, row, col);
 							}
@@ -189,173 +189,7 @@ namespace ChessTable
 						game.GameBoard.BlacksCheckers[1].Row = -1;
 						game.GameBoard.BlacksCheckers[1].Col = -1;
 						// şah çekildi mi kontrolü
-						ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
-						if (isWhitesMove)
-						{
-							Checker checkerPawn = threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
-							Checker checkerKnight = threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
-							Checker checkerBishop = threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
-							Checker checkerRook = threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
-							Checker checkerQueen = threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
-							bool isFirstFound = false;
-							bool isSecondFound = false;
-							if (checkerQueen.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								game.GameBoard.WhitesCheckers[0].Row = checkerQueen.Row;
-								game.GameBoard.WhitesCheckers[0].Col = checkerQueen.Col;
-								isFirstFound = true;
-							}
-
-							if (checkerKnight.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.WhitesCheckers[0].Row = checkerKnight.Row;
-									game.GameBoard.WhitesCheckers[0].Col = checkerKnight.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.WhitesCheckers[1].Row = checkerKnight.Row;
-									game.GameBoard.WhitesCheckers[1].Col = checkerKnight.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if(!isSecondFound && checkerBishop.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.WhitesCheckers[0].Row = checkerBishop.Row;
-									game.GameBoard.WhitesCheckers[0].Col = checkerBishop.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.WhitesCheckers[1].Row = checkerBishop.Row;
-									game.GameBoard.WhitesCheckers[1].Col = checkerBishop.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if (!isSecondFound && checkerRook.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.WhitesCheckers[0].Row = checkerRook.Row;
-									game.GameBoard.WhitesCheckers[0].Col = checkerRook.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.WhitesCheckers[1].Row = checkerRook.Row;
-									game.GameBoard.WhitesCheckers[1].Col = checkerRook.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if (!isSecondFound && checkerPawn.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.WhitesCheckers[0].Row = checkerPawn.Row;
-									game.GameBoard.WhitesCheckers[0].Col = checkerPawn.Col;
-								}
-								else
-								{
-									game.GameBoard.WhitesCheckers[1].Row = checkerPawn.Row;
-									game.GameBoard.WhitesCheckers[1].Col = checkerPawn.Col;
-								}
-							}
-						}
-						else
-						{
-							Checker checkerPawn = threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
-							Checker checkerKnight = threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
-							Checker checkerBishop = threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
-							Checker checkerRook = threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
-							Checker checkerQueen = threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
-							bool isFirstFound = false;
-							bool isSecondFound = false;
-							if (checkerQueen.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								game.GameBoard.BlacksCheckers[0].Row = checkerQueen.Row;
-								game.GameBoard.BlacksCheckers[0].Col = checkerQueen.Col;
-								isFirstFound = true;
-							}
-
-							if (checkerKnight.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.BlacksCheckers[0].Row = checkerKnight.Row;
-									game.GameBoard.BlacksCheckers[0].Col = checkerKnight.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.BlacksCheckers[1].Row = checkerKnight.Row;
-									game.GameBoard.BlacksCheckers[1].Col = checkerKnight.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if (!isSecondFound && checkerBishop.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.BlacksCheckers[0].Row = checkerBishop.Row;
-									game.GameBoard.BlacksCheckers[0].Col = checkerBishop.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.BlacksCheckers[1].Row = checkerBishop.Row;
-									game.GameBoard.BlacksCheckers[1].Col = checkerBishop.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if (!isSecondFound && checkerRook.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.BlacksCheckers[0].Row = checkerRook.Row;
-									game.GameBoard.BlacksCheckers[0].Col = checkerRook.Col;
-									isFirstFound = true;
-								}
-								else
-								{
-									game.GameBoard.BlacksCheckers[1].Row = checkerRook.Row;
-									game.GameBoard.BlacksCheckers[1].Col = checkerRook.Col;
-									isSecondFound = true;
-								}
-							}
-
-							if (!isSecondFound && checkerPawn.IsCheck)
-							{
-								game.GameBoard.IsChecked = true;
-								if (!isFirstFound)
-								{
-									game.GameBoard.BlacksCheckers[0].Row = checkerPawn.Row;
-									game.GameBoard.BlacksCheckers[0].Col = checkerPawn.Col;
-								}
-								else
-								{
-									game.GameBoard.BlacksCheckers[1].Row = checkerPawn.Row;
-									game.GameBoard.BlacksCheckers[1].Col = checkerPawn.Col;
-								}
-							}
-						}
+						HandleIsCheckedControl();
 						// hamle sırasını değiştir
 						isWhitesMove = !isWhitesMove;
 						formInstance.MatrixToPanel();
@@ -372,6 +206,177 @@ namespace ChessTable
 				pieceToMoveCol = col;
 				// Seçilen taşın gidebileceği kareleri işaretleme
 				HiglightPossibleMoves(game.GameBoard, row, col, tableLayoutPanel);
+			}
+		}
+
+		private static void HandleIsCheckedControl()
+		{
+			ThreadCheckRepository threadCheckRepository = new ThreadCheckRepository();
+			if (isWhitesMove)
+			{
+				Checker checkerPawn = threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+				Checker checkerKnight = threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+				Checker checkerBishop = threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+				Checker checkerRook = threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+				Checker checkerQueen = threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.BlackKing.Row, game.GameBoard.BlackKing.Col, isWhitesMove);
+				bool isFirstFound = false;
+				bool isSecondFound = false;
+				if (checkerQueen.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					game.GameBoard.WhitesCheckers[0].Row = checkerQueen.Row;
+					game.GameBoard.WhitesCheckers[0].Col = checkerQueen.Col;
+					isFirstFound = true;
+				}
+
+				if (checkerKnight.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.WhitesCheckers[0].Row = checkerKnight.Row;
+						game.GameBoard.WhitesCheckers[0].Col = checkerKnight.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.WhitesCheckers[1].Row = checkerKnight.Row;
+						game.GameBoard.WhitesCheckers[1].Col = checkerKnight.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerBishop.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.WhitesCheckers[0].Row = checkerBishop.Row;
+						game.GameBoard.WhitesCheckers[0].Col = checkerBishop.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.WhitesCheckers[1].Row = checkerBishop.Row;
+						game.GameBoard.WhitesCheckers[1].Col = checkerBishop.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerRook.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.WhitesCheckers[0].Row = checkerRook.Row;
+						game.GameBoard.WhitesCheckers[0].Col = checkerRook.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.WhitesCheckers[1].Row = checkerRook.Row;
+						game.GameBoard.WhitesCheckers[1].Col = checkerRook.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerPawn.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.WhitesCheckers[0].Row = checkerPawn.Row;
+						game.GameBoard.WhitesCheckers[0].Col = checkerPawn.Col;
+					}
+					else
+					{
+						game.GameBoard.WhitesCheckers[1].Row = checkerPawn.Row;
+						game.GameBoard.WhitesCheckers[1].Col = checkerPawn.Col;
+					}
+				}
+			}
+			else
+			{
+				Checker checkerPawn = threadCheckRepository.CheckPawn(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+				Checker checkerKnight = threadCheckRepository.CheckKnight(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+				Checker checkerBishop = threadCheckRepository.CheckBishop(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+				Checker checkerRook = threadCheckRepository.CheckRook(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+				Checker checkerQueen = threadCheckRepository.CheckQueen(game.GameBoard.BoardMatrix, game.GameBoard.WhiteKing.Row, game.GameBoard.WhiteKing.Col, isWhitesMove);
+				bool isFirstFound = false;
+				bool isSecondFound = false;
+				if (checkerQueen.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					game.GameBoard.BlacksCheckers[0].Row = checkerQueen.Row;
+					game.GameBoard.BlacksCheckers[0].Col = checkerQueen.Col;
+					isFirstFound = true;
+				}
+
+				if (checkerKnight.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.BlacksCheckers[0].Row = checkerKnight.Row;
+						game.GameBoard.BlacksCheckers[0].Col = checkerKnight.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.BlacksCheckers[1].Row = checkerKnight.Row;
+						game.GameBoard.BlacksCheckers[1].Col = checkerKnight.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerBishop.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.BlacksCheckers[0].Row = checkerBishop.Row;
+						game.GameBoard.BlacksCheckers[0].Col = checkerBishop.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.BlacksCheckers[1].Row = checkerBishop.Row;
+						game.GameBoard.BlacksCheckers[1].Col = checkerBishop.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerRook.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.BlacksCheckers[0].Row = checkerRook.Row;
+						game.GameBoard.BlacksCheckers[0].Col = checkerRook.Col;
+						isFirstFound = true;
+					}
+					else
+					{
+						game.GameBoard.BlacksCheckers[1].Row = checkerRook.Row;
+						game.GameBoard.BlacksCheckers[1].Col = checkerRook.Col;
+						isSecondFound = true;
+					}
+				}
+
+				if (!isSecondFound && checkerPawn.IsCheck)
+				{
+					game.GameBoard.IsChecked = true;
+					if (!isFirstFound)
+					{
+						game.GameBoard.BlacksCheckers[0].Row = checkerPawn.Row;
+						game.GameBoard.BlacksCheckers[0].Col = checkerPawn.Col;
+					}
+					else
+					{
+						game.GameBoard.BlacksCheckers[1].Row = checkerPawn.Row;
+						game.GameBoard.BlacksCheckers[1].Col = checkerPawn.Col;
+					}
+				}
 			}
 		}
 
