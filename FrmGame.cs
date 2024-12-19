@@ -63,7 +63,6 @@ namespace ChessTable
 					col = position.Column;
 					row = position.Row;
 
-
 					if ((isWhitesMove && game.GameBoard.BoardMatrix[row,col] <= 7 && game.GameBoard.BoardMatrix[row, col] != 0) || (!isWhitesMove && game.GameBoard.BoardMatrix[row, col] >= 8)) // beyaz/siyah başka taş seçti
 					{
 						pieceToMovePanel = clickedPanel;
@@ -87,9 +86,6 @@ namespace ChessTable
 								{
 									Panel upgradePanel = (Panel)tableLayoutPanel.GetControlFromPosition(col, row);
 									HandleUpgrade(row, col, pieceToMoveRow, pieceToMoveCol, upgradePanel, pieceToMovePanel);
-									isPlayed = true;
-									// Hamle işlemi fonksiyon içinde yapıldığı için if(isPlayed) kısmına atlamamız lazım
-									goto skip;
 								}
 								else if (move.Message.Contains("Eats"))
 								{
@@ -97,210 +93,26 @@ namespace ChessTable
 									var coordinates = parts[1].Split(',');
 									int eatenRow = int.Parse(coordinates[0]);
 									int eatenCol = int.Parse(coordinates[1]);
-									// Yenilen taşı matristen temizle
-									if(game.GameBoard.BoardMatrix[eatenRow, eatenCol] == white2Pawn)  // beyazın 2 kare oynanmış piyonu yendi
-									{
-										whites2List[0, 0] = -1;
-										whites2List[0, 1] = -1;
-										game.GameBoard.WhitesPoints--;  // Beyazın puanından piyonu düş
-									}
-									else if (game.GameBoard.BoardMatrix[eatenRow, eatenCol] == black2Pawn)
-									{
-										blacks9List[0, 0] = -1;
-										blacks9List[0, 1] = -1;
-										game.GameBoard.BlacksPoints--;  // Siyahın puanından piyonu düş
-									}
-									game.GameBoard.BoardMatrix[eatenRow, eatenCol] = 0;
-									// Yenilen taşı tahtadan temizle
 									Panel eatenPanel = (Panel)tableLayoutPanel.GetControlFromPosition(eatenCol, eatenRow);
-									if (eatenPanel != null)
-									{
-										eatenPanel.BackgroundImage = null;
-									}
+									HandleEats(eatenRow, eatenCol, eatenPanel);
 								}
 								else if (move.Message.Contains("Castle"))
 								{
-									var parts = move.Message.Split(' ');
-									if (parts[0] == "Short")		// kısa rok
-									{
-										if (isWhitesMove)			// beyaz kısa rok
-										{
-											Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(7, 7);
-											Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(5, 7); // panel alırken col,row olarak alınır
-											if (rookOld != null && rookNew != null)
-											{
-												// kale görselini taşı ve eskisini kaldır
-												rookNew.BackgroundImage = rookOld.BackgroundImage;
-												rookOld.BackgroundImage = null;
-											}
-											game.GameBoard.IsWhiteKingMoved = true;
-											game.GameBoard.IsWhiteShortRookMoved = true;
-											game.GameBoard.BoardMatrix[7, 5] = 5;
-											game.GameBoard.BoardMatrix[7, 7] = 0;
-											// Şahın yerini güncelle
-											game.GameBoard.WhiteKing.Row = 7;
-											game.GameBoard.WhiteKing.Col = 6;
-										}
-										else
-										{
-											Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(7, 0);  // panel alırken col,row olarak alınır
-											Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(5, 0);
-											if (rookOld != null && rookNew != null)
-											{
-												// kale görselini taşı ve eskisini kaldır
-												rookNew.BackgroundImage = rookOld.BackgroundImage;
-												rookOld.BackgroundImage = null;
-											}
-											game.GameBoard.IsBlackKingMoved = true;
-											game.GameBoard.IsBlackShortRookMoved = true;
-											game.GameBoard.BoardMatrix[0, 5] = 12;
-											game.GameBoard.BoardMatrix[0, 7] = 0;
-											// Şahın yerini güncelle
-											game.GameBoard.BlackKing.Row = 0;
-											game.GameBoard.BlackKing.Col = 6;
-										}
-									}
-									else
-									{
-										if (isWhitesMove)           // beyaz uzun rok
-										{
-											Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(0, 7);  // panel alırken col,row olarak alınır
-											Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(3, 7);
-											if (rookOld != null && rookNew != null)
-											{
-												// kale görselini taşı ve eskisini kaldır
-												rookNew.BackgroundImage = rookOld.BackgroundImage;
-												rookOld.BackgroundImage = null;
-											}
-											game.GameBoard.IsWhiteKingMoved = true;
-											game.GameBoard.IsWhiteLongRookMoved = true;
-											game.GameBoard.BoardMatrix[7, 3] = 5;
-											game.GameBoard.BoardMatrix[7, 0] = 0;
-											// Şahın yerini güncelle
-											game.GameBoard.WhiteKing.Row = 7;
-											game.GameBoard.WhiteKing.Col = 2;
-										}
-										else
-										{
-											Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(0, 0);
-											Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(3, 0);
-											if (rookOld != null && rookNew != null)
-											{
-												// kale görselini taşı ve eskisini kaldır
-												rookNew.BackgroundImage = rookOld.BackgroundImage;
-												rookOld.BackgroundImage = null;
-											}
-											game.GameBoard.IsBlackKingMoved = true;
-											game.GameBoard.IsBlackLongRookMoved = true;
-											game.GameBoard.BoardMatrix[0, 3] = 12;
-											game.GameBoard.BoardMatrix[0, 0] = 0;
-											// Şahın yerini güncelle
-											game.GameBoard.BlackKing.Row = 0;
-											game.GameBoard.BlackKing.Col = 2;
-										}
-									}
+									HandleCastle(move.Message, tableLayoutPanel);
 								}
 								else if(move.Message.Contains("King Moved"))
 								{
-									// Şahın yerini güncelle
-									if (isWhitesMove)
-									{
-										game.GameBoard.WhiteKing.Row = row;
-										game.GameBoard.WhiteKing.Col = col;
-									}
-									else
-									{
-										game.GameBoard.BlackKing.Row = row;
-										game.GameBoard.BlackKing.Col = col;
-									}
-									if (!game.GameBoard.IsWhiteKingMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
-									{
-										game.GameBoard.IsWhiteKingMoved = true;
-									}
-									else if(!game.GameBoard.IsBlackKingMoved && move.Message.Contains("Black"))
-									{
-										game.GameBoard.IsBlackKingMoved = true;
-									}
+									HandleKingMoved(row, col);
 								}
 								else if(move.Message.Contains("Rooks First Move"))
 								{
-									if (move.Message.Contains("Short"))
-									{
-										if (!game.GameBoard.IsWhiteShortRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
-										{
-											game.GameBoard.IsWhiteShortRookMoved = true;
-										}
-										else if (!game.GameBoard.IsBlackShortRookMoved && move.Message.Contains("Black"))
-										{
-											game.GameBoard.IsBlackShortRookMoved = true;
-										}
-									}
-									else
-									{
-										if (!game.GameBoard.IsWhiteLongRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
-										{
-											game.GameBoard.IsWhiteLongRookMoved = true;
-										}
-										else if (!game.GameBoard.IsBlackLongRookMoved && move.Message.Contains("Black"))
-										{
-											game.GameBoard.IsBlackLongRookMoved = true;
-										}
-									}
+									HandleRooksFirstMove(move.Message);
 								}
 							}
 
 							if(game.GameBoard.BoardMatrix[row, col] != 0)   // taş yenecek
 							{
-								// Yenilecek olan taşın puanını düş
-								if (isWhitesMove)
-								{
-									if(game.GameBoard.BoardMatrix[row, col] <= 9)  // Siyah piyon
-									{
-										game.GameBoard.BlacksPoints--;
-									}
-									else if(game.GameBoard.BoardMatrix[row, col] <= 11) // at veya fil
-									{
-										game.GameBoard.BlacksPoints -= 3;
-									}
-									else if (game.GameBoard.BoardMatrix[row, col] == 12) // kale
-									{
-										game.GameBoard.BlacksPoints -= 5;
-									}
-									else
-									{
-										game.GameBoard.BlacksPoints -= 9;
-									}
-								}
-								else
-								{
-									if (game.GameBoard.BoardMatrix[row, col] <= 2)  // Beyaz piyon
-									{
-										game.GameBoard.WhitesPoints--;
-									}
-									else if (game.GameBoard.BoardMatrix[row, col] <= 4) // at veya fil
-									{
-										game.GameBoard.WhitesPoints -= 3;
-									}
-									else if (game.GameBoard.BoardMatrix[row, col] == 5) // kale
-									{
-										game.GameBoard.WhitesPoints -= 5;
-									}
-									else
-									{
-										game.GameBoard.WhitesPoints -= 9;
-									}
-								}
-
-								if (game.GameBoard.BoardMatrix[row, col] == white2Pawn)         // beyazın 2 sürülmüş piyonu yenecek
-								{
-									whites2List[0, 0] = -1;
-									whites2List[0, 1] = -1;
-								}
-								else if (game.GameBoard.BoardMatrix[row, col] == black2Pawn)
-								{
-									blacks9List[0, 0] = -1;
-									blacks9List[0, 1] = -1;
-								}
+								HandlePieceEating(row, col);
 							}
 
 							if (game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] == 2)  // 2 sürülmüş beyaz piyon ile oynanacak
@@ -315,17 +127,16 @@ namespace ChessTable
 								blacks9List[0, 0] = -1;
 								blacks9List[0, 1] = -1;
 							}
-							// Taşı yeni pozisyona yerleştir
-							clickedPanel.BackgroundImage = pieceToMoveImage;
-							pieceToMovePanel.BackgroundImage = null; // Eski paneli temizle
-							// hamleyi matriste oyna
-							game.GameBoard.BoardMatrix[row, col] = game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol];
-							game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] = 0;
+
+							if(move.Message != "Upgrade") // Upgrade fonksiyonu hamle yapma işini hallediyor
+							{
+								MakeTheMove(clickedPanel, pieceToMoveImage, pieceToMovePanel, row, col);
+							}
 							isPlayed = true;
 						}
 					}
 
-skip:				if (isPlayed)
+					if (isPlayed)
 					{
 						// önceden 2 yapılmış piyon varsa temizle
 						if (whites2List[0, 0] != -1)
@@ -561,6 +372,224 @@ skip:				if (isPlayed)
 				pieceToMoveCol = col;
 				// Seçilen taşın gidebileceği kareleri işaretleme
 				HiglightPossibleMoves(game.GameBoard, row, col, tableLayoutPanel);
+			}
+		}
+
+		private static void HandleCastle(string message, TableLayoutPanel tableLayoutPanel)
+		{
+			if (message.Contains("Short"))        // kısa rok
+			{
+				if (isWhitesMove)           // beyaz kısa rok
+				{
+					Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(7, 7);
+					Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(5, 7); // panel alırken col,row olarak alınır
+					if (rookOld != null && rookNew != null)
+					{
+						// kale görselini taşı ve eskisini kaldır
+						rookNew.BackgroundImage = rookOld.BackgroundImage;
+						rookOld.BackgroundImage = null;
+					}
+					game.GameBoard.IsWhiteKingMoved = true;
+					game.GameBoard.IsWhiteShortRookMoved = true;
+					game.GameBoard.BoardMatrix[7, 5] = 5;
+					game.GameBoard.BoardMatrix[7, 7] = 0;
+					// Şahın yerini güncelle
+					game.GameBoard.WhiteKing.Row = 7;
+					game.GameBoard.WhiteKing.Col = 6;
+				}
+				else
+				{
+					Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(7, 0);  // panel alırken col,row olarak alınır
+					Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(5, 0);
+					if (rookOld != null && rookNew != null)
+					{
+						// kale görselini taşı ve eskisini kaldır
+						rookNew.BackgroundImage = rookOld.BackgroundImage;
+						rookOld.BackgroundImage = null;
+					}
+					game.GameBoard.IsBlackKingMoved = true;
+					game.GameBoard.IsBlackShortRookMoved = true;
+					game.GameBoard.BoardMatrix[0, 5] = 12;
+					game.GameBoard.BoardMatrix[0, 7] = 0;
+					// Şahın yerini güncelle
+					game.GameBoard.BlackKing.Row = 0;
+					game.GameBoard.BlackKing.Col = 6;
+				}
+			}
+			else
+			{
+				if (isWhitesMove)           // beyaz uzun rok
+				{
+					Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(0, 7);  // panel alırken col,row olarak alınır
+					Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(3, 7);
+					if (rookOld != null && rookNew != null)
+					{
+						// kale görselini taşı ve eskisini kaldır
+						rookNew.BackgroundImage = rookOld.BackgroundImage;
+						rookOld.BackgroundImage = null;
+					}
+					game.GameBoard.IsWhiteKingMoved = true;
+					game.GameBoard.IsWhiteLongRookMoved = true;
+					game.GameBoard.BoardMatrix[7, 3] = 5;
+					game.GameBoard.BoardMatrix[7, 0] = 0;
+					// Şahın yerini güncelle
+					game.GameBoard.WhiteKing.Row = 7;
+					game.GameBoard.WhiteKing.Col = 2;
+				}
+				else
+				{
+					Panel rookOld = (Panel)tableLayoutPanel.GetControlFromPosition(0, 0);
+					Panel rookNew = (Panel)tableLayoutPanel.GetControlFromPosition(3, 0);
+					if (rookOld != null && rookNew != null)
+					{
+						// kale görselini taşı ve eskisini kaldır
+						rookNew.BackgroundImage = rookOld.BackgroundImage;
+						rookOld.BackgroundImage = null;
+					}
+					game.GameBoard.IsBlackKingMoved = true;
+					game.GameBoard.IsBlackLongRookMoved = true;
+					game.GameBoard.BoardMatrix[0, 3] = 12;
+					game.GameBoard.BoardMatrix[0, 0] = 0;
+					// Şahın yerini güncelle
+					game.GameBoard.BlackKing.Row = 0;
+					game.GameBoard.BlackKing.Col = 2;
+				}
+			}
+		}
+
+		private static void MakeTheMove(Panel clickedPanel, Image pieceToMoveImage, Panel pieceToMovePanel, int row, int col)
+		{
+			// Taşı yeni pozisyona yerleştir
+			clickedPanel.BackgroundImage = pieceToMoveImage;
+			pieceToMovePanel.BackgroundImage = null; // Eski paneli temizle
+			// hamleyi matriste oyna
+			game.GameBoard.BoardMatrix[row, col] = game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol];
+			game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] = 0;
+		}
+
+		private static void HandlePieceEating(int row, int col)
+		{
+			// Yenilecek olan taşın puanını düş
+			if (isWhitesMove)
+			{
+				if (game.GameBoard.BoardMatrix[row, col] <= 9)  // Siyah piyon
+				{
+					game.GameBoard.BlacksPoints--;
+				}
+				else if (game.GameBoard.BoardMatrix[row, col] <= 11) // at veya fil
+				{
+					game.GameBoard.BlacksPoints -= 3;
+				}
+				else if (game.GameBoard.BoardMatrix[row, col] == 12) // kale
+				{
+					game.GameBoard.BlacksPoints -= 5;
+				}
+				else
+				{
+					game.GameBoard.BlacksPoints -= 9;
+				}
+			}
+			else
+			{
+				if (game.GameBoard.BoardMatrix[row, col] <= 2)  // Beyaz piyon
+				{
+					game.GameBoard.WhitesPoints--;
+				}
+				else if (game.GameBoard.BoardMatrix[row, col] <= 4) // at veya fil
+				{
+					game.GameBoard.WhitesPoints -= 3;
+				}
+				else if (game.GameBoard.BoardMatrix[row, col] == 5) // kale
+				{
+					game.GameBoard.WhitesPoints -= 5;
+				}
+				else
+				{
+					game.GameBoard.WhitesPoints -= 9;
+				}
+			}
+
+			if (game.GameBoard.BoardMatrix[row, col] == white2Pawn)         // beyazın 2 sürülmüş piyonu yenecek
+			{
+				whites2List[0, 0] = -1;
+				whites2List[0, 1] = -1;
+			}
+			else if (game.GameBoard.BoardMatrix[row, col] == black2Pawn)
+			{
+				blacks9List[0, 0] = -1;
+				blacks9List[0, 1] = -1;
+			}
+		}
+
+		private static void HandleRooksFirstMove(string message)
+		{
+			if (move.Message.Contains("Short"))
+			{
+				if (!game.GameBoard.IsWhiteShortRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
+				{
+					game.GameBoard.IsWhiteShortRookMoved = true;
+				}
+				else if (!game.GameBoard.IsBlackShortRookMoved && move.Message.Contains("Black"))
+				{
+					game.GameBoard.IsBlackShortRookMoved = true;
+				}
+			}
+			else
+			{
+				if (!game.GameBoard.IsWhiteLongRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
+				{
+					game.GameBoard.IsWhiteLongRookMoved = true;
+				}
+				else if (!game.GameBoard.IsBlackLongRookMoved && move.Message.Contains("Black"))
+				{
+					game.GameBoard.IsBlackLongRookMoved = true;
+				}
+			}
+		}
+
+		private static void HandleKingMoved(int row, int col)
+		{
+			// şahın yerini güncelle
+			if (isWhitesMove)
+			{
+				game.GameBoard.WhiteKing.Row = row;
+				game.GameBoard.WhiteKing.Col = col;
+			}
+			else
+			{
+				game.GameBoard.BlackKing.Row = row;
+				game.GameBoard.BlackKing.Col = col;
+			}
+			if (!game.GameBoard.IsWhiteKingMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
+			{
+				game.GameBoard.IsWhiteKingMoved = true;
+			}
+			else if (!game.GameBoard.IsBlackKingMoved && move.Message.Contains("Black"))
+			{
+				game.GameBoard.IsBlackKingMoved = true;
+			}
+		}
+
+		private static void HandleEats(int eatenRow, int eatenCol, Panel eatenPanel)
+		{
+			// Yenilen taşı matristen temizle
+			if (game.GameBoard.BoardMatrix[eatenRow, eatenCol] == white2Pawn)  // beyazın 2 kare oynanmış piyonu yendi
+			{
+				whites2List[0, 0] = -1;
+				whites2List[0, 1] = -1;
+				game.GameBoard.WhitesPoints--;  // Beyazın puanından piyonu düş
+			}
+			else if (game.GameBoard.BoardMatrix[eatenRow, eatenCol] == black2Pawn)
+			{
+				blacks9List[0, 0] = -1;
+				blacks9List[0, 1] = -1;
+				game.GameBoard.BlacksPoints--;  // Siyahın puanından piyonu düş
+			}
+			game.GameBoard.BoardMatrix[eatenRow, eatenCol] = 0;
+			// Yenilen taşı tahtadan temizle
+			if (eatenPanel != null)
+			{
+				eatenPanel.BackgroundImage = null;
 			}
 		}
 
