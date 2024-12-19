@@ -386,7 +386,7 @@ namespace ChessTable.Repositories
 					{
 						Column = column + 1,
 						Row = row - 1,
-						Message = isUpgrade ? "Upgrade&" : "",
+						Message = isUpgrade ? "Upgrade" : "",
 					};
 					moveList.Add(move);
 				}

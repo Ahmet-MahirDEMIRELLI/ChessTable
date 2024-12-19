@@ -48,7 +48,7 @@ namespace ChessTable.Helper
 		}
 
 		// Görseli yüklerken hata kontrolü yapan yardımcı fonksiyon
-		private static Image LoadImage(string path)
+		public static Image LoadImage(string path)
 		{
 			try
 			{

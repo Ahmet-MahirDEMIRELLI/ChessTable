@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using ChessTable.Classes;
 using ChessTable.Helper;
@@ -84,7 +85,11 @@ namespace ChessTable
 							{
 								if(move.Message == "Upgrade")
 								{
-									HandleUpgrade();
+									Panel upgradePanel = (Panel)tableLayoutPanel.GetControlFromPosition(col, row);
+									HandleUpgrade(row, col, pieceToMoveRow, pieceToMoveCol, upgradePanel, pieceToMovePanel);
+									isPlayed = true;
+									// Hamle işlemi fonksiyon içinde yapıldığı için if(isPlayed) kısmına atlamamız lazım
+									goto skip;
 								}
 								else if (move.Message.Contains("Eats"))
 								{
@@ -320,7 +325,7 @@ namespace ChessTable
 						}
 					}
 
-					if (isPlayed)
+skip:				if (isPlayed)
 					{
 						// önceden 2 yapılmış piyon varsa temizle
 						if (whites2List[0, 0] != -1)
@@ -665,9 +670,136 @@ namespace ChessTable
 			}
 		}
 
-		public static void HandleUpgrade()
+		public static void HandleUpgrade(int row, int col, int oldRow, int oldCol, Panel panel, Panel oldPanel)
 		{
-			// Method will be complted later.
+			string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\assets");
+			assetsPath = Path.GetFullPath(assetsPath);
+			using (FrmUpgradeInput upgradeForm = new FrmUpgradeInput())
+			{
+				if (upgradeForm.ShowDialog() == DialogResult.OK)
+				{
+					string selectedOption = upgradeForm.SelectedOption;
+					if (isWhitesMove)
+					{
+						// yenecek taş varsa puanını düş
+						if(game.GameBoard.BoardMatrix[row, col] == 10 || game.GameBoard.BoardMatrix[row, col] == 11)
+						{
+							game.GameBoard.BlacksPoints -= 3;
+						}
+						else if(game.GameBoard.BoardMatrix[row, col] == 12)
+						{
+							if(row == 0)
+							{
+								if(col == 0)
+								{
+									game.GameBoard.IsBlackLongRookMoved = true;
+								}
+								else if(col == 7)
+								{
+									game.GameBoard.IsBlackShortRookMoved = true;
+								}
+							}
+							game.GameBoard.BlacksPoints -= 5;
+						}
+						else if(game.GameBoard.BoardMatrix[row, col] == 13)
+						{
+							game.GameBoard.BlacksPoints -= 9;
+						}
+
+						switch (selectedOption)
+						{
+							case "4-Queen":
+								// -1 piyon +9 vezir
+								game.GameBoard.WhitesPoints += 8;
+								// matrisi güncelle
+								game.GameBoard.BoardMatrix[row, col] = 6;
+								// paneli güncelle
+								Image whiteQueen = InitializePieces.LoadImage(assetsPath + "/QueenW.png");
+								panel.BackgroundImage = whiteQueen;
+								break;
+							case "3-Rook":
+								game.GameBoard.WhitesPoints += 4;
+								game.GameBoard.BoardMatrix[row, col] = 5;
+								Image whiteRook = InitializePieces.LoadImage(assetsPath + "/RookW.png");
+								panel.BackgroundImage = whiteRook;
+								break;
+							case "1-Bishop":
+								game.GameBoard.WhitesPoints += 2;
+								game.GameBoard.BoardMatrix[row, col] = 4;
+								Image whiteBishop = InitializePieces.LoadImage(assetsPath + "/BishopW.png");
+								panel.BackgroundImage = whiteBishop;
+								break;
+							case "2-Knight":
+								game.GameBoard.WhitesPoints += 2;
+								game.GameBoard.BoardMatrix[row, col] = 3;
+								Image whiteKnight = InitializePieces.LoadImage(assetsPath + "/KnightW.png");
+								panel.BackgroundImage = whiteKnight;
+								break;
+						}
+					}
+					else
+					{
+						if (game.GameBoard.BoardMatrix[row, col] == 3 || game.GameBoard.BoardMatrix[row, col] == 4)
+						{
+							game.GameBoard.WhitesPoints -= 3;
+						}
+						else if (game.GameBoard.BoardMatrix[row, col] == 5)
+						{
+							if (row == 7)
+							{
+								if (col == 0)
+								{
+									game.GameBoard.IsWhiteLongRookMoved = true;
+								}
+								else if (col == 7)
+								{
+									game.GameBoard.IsWhiteShortRookMoved = true;
+								}
+							}
+							game.GameBoard.WhitesPoints -= 5;
+						}
+						else if (game.GameBoard.BoardMatrix[row, col] == 6)
+						{
+							game.GameBoard.WhitesPoints -= 9;
+						}
+
+						switch (selectedOption)
+						{
+							case "4-Queen":
+								game.GameBoard.BlacksPoints += 8;
+								game.GameBoard.BoardMatrix[row, col] = 13;
+								Image blackQueen = InitializePieces.LoadImage(assetsPath + "/QueenB.png");
+								panel.BackgroundImage = blackQueen;
+								break;
+							case "3-Rook":
+								game.GameBoard.BlacksPoints += 4;
+								game.GameBoard.BoardMatrix[row, col] = 12;
+								Image blackRook = InitializePieces.LoadImage(assetsPath + "/RookB.png");
+								panel.BackgroundImage = blackRook;
+								break;
+							case "1-Bishop":
+								game.GameBoard.BlacksPoints += 2;
+								game.GameBoard.BoardMatrix[row, col] = 11;
+								Image blackBishop = InitializePieces.LoadImage(assetsPath + "/BishopB.png");
+								panel.BackgroundImage = blackBishop;
+								break;
+							case "2-Knight":
+								game.GameBoard.BlacksPoints += 2;
+								game.GameBoard.BoardMatrix[row, col] = 10;
+								Image blackKnight = InitializePieces.LoadImage(assetsPath + "/KnightB.png");
+								panel.BackgroundImage = blackKnight;
+								break;
+						}
+					}
+					game.GameBoard.BoardMatrix[oldRow, oldCol] = 0;
+					oldPanel.BackgroundImage = null;
+				}
+				else
+				{
+					MessageBox.Show("Seçim yapmak zorunludur");
+					HandleUpgrade(row, col, oldRow, oldCol, panel, oldPanel);
+				}
+			}
 		}
 
 		public void MatrixToPanel()
