@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using ChessTable.Classes;
 using ChessTable.Helper;
@@ -13,7 +14,6 @@ namespace ChessTable
 {
 	public partial class FrmGame : Form
 	{
-		DataTable notationTable = new DataTable();
 		private static Panel pieceToMovePanel = null; // Seçilen taşın paneli
 		private static Image pieceToMoveImage = null; // Seçilen taşın görseli
 		private static Game game = new Game();
@@ -28,6 +28,7 @@ namespace ChessTable
 		private static int white2Pawn = 2;
 		private static int blackPawn = 8;
 		private static int black2Pawn = 9;
+		private static DataGridView notationGridView;
 
 		public FrmGame()
 		{
@@ -42,16 +43,16 @@ namespace ChessTable
 			InitializeBoardMatrix();
 			MatrixToPanel();
 			dataGridView1.Width = 233;
-			dataGridView1.DataSource = notationTable;
+			notationGridView = dataGridView1;
 		}
 
 		private static void OnCellClick(object sender, EventArgs e, TableLayoutPanel tableLayoutPanel, FrmGame formInstance)
 		{
 			Panel clickedPanel = (Panel)sender;
-
 			TableLayoutPanelCellPosition position = tableLayoutPanel.GetCellPosition(clickedPanel);
 			int col = position.Column;
 			int row = position.Row;
+			string moveNotation = "";
 
 			// Taş seçildikten sonra başak bir kareye tıklanınca true
 			if (pieceToMovePanel != null)
@@ -76,6 +77,7 @@ namespace ChessTable
 					else
 					{
 						move = IsMoveValid(row, col);
+						moveNotation = GetNotation(row, col, pieceToMoveRow, pieceToMoveCol);
 						if (move != null)
 						{
 							// şah çekilme durumunu temizle
@@ -86,6 +88,7 @@ namespace ChessTable
 								{
 									Panel upgradePanel = (Panel)tableLayoutPanel.GetControlFromPosition(col, row);
 									HandleUpgrade(row, col, pieceToMoveRow, pieceToMoveCol, upgradePanel, pieceToMovePanel);
+									moveNotation = GetPieceName(game.GameBoard.BoardMatrix[row, col]);
 								}
 								else if (move.Message.Contains("Enpassant"))
 								{
@@ -99,6 +102,14 @@ namespace ChessTable
 								else if (move.Message.Contains("Castle"))
 								{
 									HandleCastle(move.Message, tableLayoutPanel);
+									if (move.Message.Contains("Short"))
+									{
+										moveNotation = "o-o";
+									}
+									else
+									{
+										moveNotation = "o-o-o";
+									}
 								}
 								else if(move.Message.Contains("King Moved"))
 								{
@@ -190,6 +201,23 @@ namespace ChessTable
 						game.GameBoard.BlacksCheckers[1].Col = -1;
 						// şah çekildi mi kontrolü
 						HandleIsCheckedControl();
+						if (game.GameBoard.IsChecked)
+						{
+							moveNotation += "+";
+						}
+						// notasyonu ekle
+						if (isWhitesMove)  
+						{
+							game.WhiteMoves.Add(moveNotation);
+							notationGridView.Rows.Add(game.MoveCounter.ToString(), game.WhiteMoves[game.MoveCounter - 1], "");
+						}
+						else
+						{
+							game.BlackMoves.Add(moveNotation);
+							notationGridView.Rows.RemoveAt(game.MoveCounter-1);
+							notationGridView.Rows.Add(game.MoveCounter.ToString(), game.WhiteMoves[game.MoveCounter - 1], game.BlackMoves[game.MoveCounter - 1]);
+							game.MoveCounter++;
+						}
 						// hamle sırasını değiştir
 						isWhitesMove = !isWhitesMove;
 						formInstance.MatrixToPanel();
@@ -207,6 +235,117 @@ namespace ChessTable
 				// Seçilen taşın gidebileceği kareleri işaretleme
 				HiglightPossibleMoves(game.GameBoard, row, col, tableLayoutPanel);
 			}
+		}
+
+		private static string GetNotation(int row, int col, int pieceToMoveRow, int pieceToMoveCol)
+		{
+			string notation = "";
+			if (game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] == 1 ||
+				game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] == 2 ||
+				game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] == 8 ||
+				game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol] == 9)
+			{
+				if (game.GameBoard.BoardMatrix[row, col] != 0)
+				{
+					notation = GetColName(pieceToMoveCol) + "x" + GetColName(col) + GetRowNumber(row);
+				}
+				else
+				{
+					string newColName = GetColName(col);
+					string oldColName = GetColName(pieceToMoveCol);
+					if(oldColName != newColName)
+					{
+						notation = oldColName + newColName + GetRowNumber(row);
+					}
+					else
+					{
+						notation = newColName + GetRowNumber(row);
+					}
+				}
+			}
+			else
+			{
+				if (game.GameBoard.BoardMatrix[row, col] != 0)
+				{
+					notation = GetPieceName(game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol]) + "x" + GetColName(col) + GetRowNumber(row);
+				}
+				else
+				{
+					notation = GetPieceName(game.GameBoard.BoardMatrix[pieceToMoveRow, pieceToMoveCol]) + GetColName(col) + GetRowNumber(row);
+				}
+			}
+			return notation;
+		}
+
+		private static string GetPieceName(byte piece)
+		{
+			switch (piece)
+			{
+				case 3:
+				case 10:
+					return "A";
+				case 4:
+				case 11:
+					return "F";
+				case 5:
+				case 12:
+					return "K";
+				case 6:
+				case 13:
+					return "V";
+				case 7:
+				case 14:
+					return "S";
+			}
+			return "";
+		}
+
+		private static string GetRowNumber(int row)
+		{
+			switch (row)
+			{
+				case 0:
+					return "8";
+				case 1:
+					return "7";
+				case 2:
+					return "6";
+				case 3:
+					return "5";
+				case 4:
+					return "4";
+				case 5:
+					return "3";
+				case 6:
+					return "2";
+				case 7:
+					return "1";
+			}
+			return "";
+		}
+
+		private static string GetColName(int col)
+		{
+			switch(col)
+			{
+				case 0:
+					return "a";
+				case 1:
+					return "b";
+				case 2:
+					return "c";
+				case 3:
+					return "d";
+				case 4:
+					return "e";
+				case 5:
+					return "f";
+				case 6:
+					return "g";
+				case 7:
+					return "h";
+			}
+			return "";
 		}
 
 		private static void HandleIsCheckedControl()
@@ -976,6 +1115,10 @@ namespace ChessTable
 			game.GameBoard.IsWhiteLongRookMoved = false;
 			game.GameBoard.IsBlackShortRookMoved = false;
 			game.GameBoard.IsBlackLongRookMoved = false;
+
+			game.WhiteMoves = new List<string>();
+			game.BlackMoves = new List<string>();
+			game.MoveCounter = 1;
 		}
 	}
 }

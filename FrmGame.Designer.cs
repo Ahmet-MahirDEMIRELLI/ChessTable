@@ -46,9 +46,6 @@
 			this.label15 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.No = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.White = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Black = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridView2 = new System.Windows.Forms.DataGridView();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.label17 = new System.Windows.Forms.Label();
@@ -79,6 +76,9 @@
 			this.label29 = new System.Windows.Forms.Label();
 			this.textBox14 = new System.Windows.Forms.TextBox();
 			this.label30 = new System.Windows.Forms.Label();
+			this.No = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.WhiteMove = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.BlackMove = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
 			this.SuspendLayout();
@@ -278,8 +278,8 @@
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.No,
-            this.White,
-            this.Black});
+            this.WhiteMove,
+            this.BlackMove});
 			this.dataGridView1.Location = new System.Drawing.Point(1420, 492);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.dataGridView1.Name = "dataGridView1";
@@ -288,30 +288,6 @@
 			this.dataGridView1.RowHeadersWidth = 51;
 			this.dataGridView1.Size = new System.Drawing.Size(231, 414);
 			this.dataGridView1.TabIndex = 17;
-			// 
-			// No
-			// 
-			this.No.HeaderText = "#";
-			this.No.MinimumWidth = 6;
-			this.No.Name = "No";
-			this.No.ReadOnly = true;
-			this.No.Width = 30;
-			// 
-			// White
-			// 
-			this.White.HeaderText = "White";
-			this.White.MinimumWidth = 6;
-			this.White.Name = "White";
-			this.White.ReadOnly = true;
-			this.White.Width = 125;
-			// 
-			// Black
-			// 
-			this.Black.HeaderText = "Black";
-			this.Black.MinimumWidth = 6;
-			this.Black.Name = "Black";
-			this.Black.ReadOnly = true;
-			this.Black.Width = 125;
 			// 
 			// dataGridView2
 			// 
@@ -587,6 +563,30 @@
 			this.label30.TabIndex = 46;
 			this.label30.Text = "Black Points:";
 			// 
+			// No
+			// 
+			this.No.HeaderText = "#";
+			this.No.MinimumWidth = 6;
+			this.No.Name = "No";
+			this.No.ReadOnly = true;
+			this.No.Width = 30;
+			// 
+			// WhiteMove
+			// 
+			this.WhiteMove.HeaderText = "White";
+			this.WhiteMove.MinimumWidth = 6;
+			this.WhiteMove.Name = "WhiteMove";
+			this.WhiteMove.ReadOnly = true;
+			this.WhiteMove.Width = 125;
+			// 
+			// BlackMove
+			// 
+			this.BlackMove.HeaderText = "Black";
+			this.BlackMove.MinimumWidth = 6;
+			this.BlackMove.Name = "BlackMove";
+			this.BlackMove.ReadOnly = true;
+			this.BlackMove.Width = 125;
+			// 
 			// FrmGame
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -672,9 +672,6 @@
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.DataGridView dataGridView2;
-		private System.Windows.Forms.DataGridViewTextBoxColumn No;
-		private System.Windows.Forms.DataGridViewTextBoxColumn White;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Black;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.Label label17;
 		private System.Windows.Forms.TextBox textBox1;
@@ -704,6 +701,9 @@
 		private System.Windows.Forms.Label label29;
 		private System.Windows.Forms.TextBox textBox14;
 		private System.Windows.Forms.Label label30;
+		private System.Windows.Forms.DataGridViewTextBoxColumn No;
+		private System.Windows.Forms.DataGridViewTextBoxColumn WhiteMove;
+		private System.Windows.Forms.DataGridViewTextBoxColumn BlackMove;
 	}
 }
 
