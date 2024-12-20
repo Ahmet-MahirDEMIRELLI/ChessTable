@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChessRobot.Properties
+namespace ChessTable.Properties
 {
 
 
