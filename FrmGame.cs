@@ -40,7 +40,7 @@ namespace ChessTable
 			InitializeChessBoard(tableLayoutPanel1, this);
 			InitializeChessBoard(tableLayoutPanel2, this);
 			InitializePieces.PlacePieces(tableLayoutPanel1);
-			InitializeBoardMatrix();
+			InitializeGame();
 			MatrixToPanel();
 			dataGridView1.Width = 233;
 			notationGridView = dataGridView1;
@@ -217,6 +217,20 @@ namespace ChessTable
 							notationGridView.Rows.RemoveAt(game.MoveCounter-1);
 							notationGridView.Rows.Add(game.MoveCounter.ToString(), game.WhiteMoves[game.MoveCounter - 1], game.BlackMoves[game.MoveCounter - 1]);
 							game.MoveCounter++;
+						}
+						// 50 hamle counter'ını güncelle
+						if (moveNotation.Contains("x") || moveNotation[0] >= 97)  // ASCII değeri >= 97 ise küçük harftir yani piyon hamlesi
+						{
+							game.FiftyCount = 0;
+						}
+						else
+						{
+							game.FiftyCount++;
+							// 50 hamle oldu mu kontrolü
+							if (game.FiftyCount == 100)
+							{
+								MessageBox.Show("50 hamle oldu");
+							}
 						}
 						// hamle sırasını değiştir
 						isWhitesMove = !isWhitesMove;
@@ -1026,9 +1040,11 @@ namespace ChessTable
 			textBox12.Text = "[" + game.GameBoard.BlacksCheckers[0].Row + ", " + game.GameBoard.BlacksCheckers[0].Col + "] / [" + game.GameBoard.BlacksCheckers[1].Row + ", " + game.GameBoard.BlacksCheckers[1].Col + "]";
 			textBox13.Text = game.GameBoard.WhitesPoints.ToString();
 			textBox14.Text = game.GameBoard.BlacksPoints.ToString();
+			textBox15.Text = game.FiftyCount.ToString();
+			textBox16.Text = game.ThreePositionCount.ToString();
 		}
 
-		public static void InitializeBoardMatrix()
+		public static void InitializeGame()
 		{
 			isWhitesMove = true;
 			game.GameBoard = new Board(8, 8);
@@ -1119,6 +1135,7 @@ namespace ChessTable
 			game.WhiteMoves = new List<string>();
 			game.BlackMoves = new List<string>();
 			game.MoveCounter = 1;
+			game.FiftyCount = 0;
 		}
 	}
 }
