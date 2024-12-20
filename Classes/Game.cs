@@ -9,7 +9,7 @@ namespace ChessTable.Classes
         public List<string> BlackMoves { get; set; }
         public int MoveCounter { get; set; }
         public int FiftyCount { get; set; }
-        public int ThreePositionCount { get; set; }
+        public List<ulong> PositionHashes { get; set; }
         public bool DidWhiteOfferDraw { get; set; }
         public bool DidBlackOfferDraw { get; set; }
         public bool DidWhiteResign { get; set; }

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Text;
 using System.Windows.Forms;
 using ChessTable.Classes;
 using ChessTable.Helper;
@@ -30,6 +31,7 @@ namespace ChessTable
 		private static int blackPawn = 8;
 		private static int black2Pawn = 9;
 		private static DataGridView notationGridView;
+		private static readonly ulong[,] zobristTable = new ulong[15, 8 * 8];
 
 		public FrmGame()
 		{
@@ -41,10 +43,47 @@ namespace ChessTable
 			InitializeChessBoard(tableLayoutPanel1, this);
 			InitializeChessBoard(tableLayoutPanel2, this);
 			InitializePieces.PlacePieces(tableLayoutPanel1);
+			InitializeZobrisTable();
 			InitializeGame();
 			MatrixToPanel();
 			dataGridView1.Width = 233;
 			notationGridView = dataGridView1;
+		}
+
+		private static ulong CalculateHash(byte[,] m)
+		{
+			ulong hash = 0;
+
+			for (int row = 0; row < 8; row++)
+			{
+				for (int col = 0; col < 8; col++)
+				{
+					byte piece = m[row, col];
+					if (piece != 0) // Boş kareler atlanır
+					{
+						if (piece == 2 || piece == 9)
+						{
+							piece--;
+						}
+						int squareIndex = row * 8 + col;
+						hash ^= zobristTable[piece, squareIndex];
+					}
+				}
+			}
+
+			return hash;
+		}
+
+		private void InitializeZobrisTable()
+		{
+			Random random = new Random();
+			for (int piece = 1; piece <= 14; piece++) // Taş türleri
+			{
+				for (int square = 0; square < 8 * 8; square++) // Kareler
+				{
+					zobristTable[piece, square] = ((ulong)random.Next() << 32) | (ulong)random.Next();
+				}
+			}
 		}
 
 		private static void OnCellClick(object sender, EventArgs e, TableLayoutPanel tableLayoutPanel, FrmGame formInstance)
@@ -233,6 +272,10 @@ namespace ChessTable
 								MessageBox.Show("50 hamle oldu");
 							}
 						}
+						WriteHash();
+						if(IsThreePosition()){
+							MessageBox.Show("3 hamle tekrarı");
+						}
 						// hamle sırasını değiştir
 						isWhitesMove = !isWhitesMove;
 						formInstance.MatrixToPanel();
@@ -251,6 +294,25 @@ namespace ChessTable
 				HiglightPossibleMoves(game.GameBoard, row, col, tableLayoutPanel);
 			}
 		}
+
+		private static bool IsThreePosition()
+		{
+			return game.PositionHashes[9] == game.PositionHashes[5] && game.PositionHashes[5] == game.PositionHashes[1];
+		}
+
+		private static void WriteHash()
+		{
+			game.PositionHashes[0] = game.PositionHashes[1];
+			game.PositionHashes[1] = game.PositionHashes[2];
+			game.PositionHashes[2] = game.PositionHashes[3];
+			game.PositionHashes[3] = game.PositionHashes[4];
+			game.PositionHashes[4] = game.PositionHashes[5];
+			game.PositionHashes[5] = game.PositionHashes[6];
+			game.PositionHashes[6] = game.PositionHashes[7];
+			game.PositionHashes[7] = game.PositionHashes[8];
+			game.PositionHashes[8] = game.PositionHashes[9];
+			game.PositionHashes[9] = CalculateHash(game.GameBoard.BoardMatrix);
+ 		}
 
 		private static string GetNotation(int row, int col, int pieceToMoveRow, int pieceToMoveCol)
 		{
@@ -1042,7 +1104,16 @@ namespace ChessTable
 			textBox13.Text = game.GameBoard.WhitesPoints.ToString();
 			textBox14.Text = game.GameBoard.BlacksPoints.ToString();
 			textBox15.Text = game.FiftyCount.ToString();
-			textBox16.Text = game.ThreePositionCount.ToString();
+			textBox17.Text = game.PositionHashes[0].ToString();
+			textBox18.Text = game.PositionHashes[1].ToString();
+			textBox19.Text = game.PositionHashes[2].ToString();
+			textBox20.Text = game.PositionHashes[3].ToString();
+			textBox21.Text = game.PositionHashes[4].ToString();
+			textBox22.Text = game.PositionHashes[5].ToString();
+			textBox23.Text = game.PositionHashes[6].ToString();
+			textBox24.Text = game.PositionHashes[7].ToString();
+			textBox25.Text = game.PositionHashes[8].ToString();
+			textBox26.Text = game.PositionHashes[9].ToString();
 		}
 
 		public static void InitializeGame()
@@ -1137,6 +1208,51 @@ namespace ChessTable
 			game.BlackMoves = new List<string>();
 			game.MoveCounter = 1;
 			game.FiftyCount = 0;
+
+			game.PositionHashes = new List<ulong>
+			{
+				0,0,0,0,0,0,0,0,0,0,
+			};
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			string[] whiteMoves = game.WhiteMoves.ToArray();
+			string[] blackMoves = game.BlackMoves.ToArray();
+			StringBuilder notationBuilder = new StringBuilder();
+			notationBuilder.AppendLine(DateTime.Now.ToString());
+			int i = whiteMoves.Length;
+			int j = blackMoves.Length;
+			int k;
+			for(k = 0; k < j; k++)
+			{
+				notationBuilder.AppendLine($"{k + 1}: {whiteMoves[k]}-{blackMoves[k]}");
+			}
+			if(k < i)
+			{
+				notationBuilder.AppendLine($"{k + 1}: {whiteMoves[k]}");
+			}
+			string notation = notationBuilder.ToString();
+
+			SaveFileDialog saveFileDialog = new SaveFileDialog
+			{
+				Filter = "Text Files (*.txt)|*.txt",
+				Title = "Notasyonu Kaydet",
+				FileName = "notation.txt"
+			};
+
+			if (saveFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				try
+				{
+					System.IO.File.WriteAllText(saveFileDialog.FileName, notation);
+					MessageBox.Show("Dosya başarıyla kaydedildi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show($"Dosya kaydedilirken bir hata oluştu:\n{ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
 		}
 	}
 }
