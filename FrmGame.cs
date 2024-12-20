@@ -240,7 +240,11 @@ namespace ChessTable
 						game.GameBoard.BlacksCheckers[1].Row = -1;
 						game.GameBoard.BlacksCheckers[1].Col = -1;
 						// şah çekildi mi kontrolü
-						HandleIsCheckedControl();
+						if (game.GameBoard.BoardMatrix[row, col] != 7 && game.GameBoard.BoardMatrix[row, col] != 14)
+						{
+							HandleIsCheckedControl();
+						}
+
 						if (game.GameBoard.IsChecked)
 						{
 							moveNotation += "+";

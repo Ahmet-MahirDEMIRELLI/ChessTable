@@ -280,7 +280,7 @@ namespace ChessTable.Repositories
 				int i = row - 1, j = col - 1;
 				while (i >= 0 && j >= 0)            // sol üst çapraz
 				{
-					if (m[i, j] == 6)      // arayı kesen siyah taş var
+					if (m[i, j] == 6)
 					{
 						checker.Row = i;
 						checker.Col = j;

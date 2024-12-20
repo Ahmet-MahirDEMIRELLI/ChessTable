@@ -167,7 +167,7 @@ namespace ChessTable.Repositories
 				{
 					square = new Square()
 					{
-						Row = row-1,
+						Row = row - 1,
 						Col = column - 1,
 					};
 					squaresToCheck.Add(square);
@@ -486,10 +486,10 @@ namespace ChessTable.Repositories
 			}
 			if(counter == squares.Count)     // her eleman için koşulları geçtiyse tüm kareler güvende
 			{
-				squares = new List<Square>();
+				squares.Clear();
 				return false;
 			}
-			squares = new List<Square>();
+			squares.Clear();
 			return true;      
 		}
 	}
