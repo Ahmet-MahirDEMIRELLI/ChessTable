@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using ChessTable.Classes;
 using ChessTable.Helper;
@@ -681,24 +682,24 @@ namespace ChessTable
 
 		private static void HandleRooksFirstMove(string message)
 		{
-			if (move.Message.Contains("Short"))
+			if (message.Contains("Short"))
 			{
-				if (!game.GameBoard.IsWhiteShortRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
+				if (!game.GameBoard.IsWhiteShortRookMoved && message.Contains("White"))  // daha önce oynanmamış ise
 				{
 					game.GameBoard.IsWhiteShortRookMoved = true;
 				}
-				else if (!game.GameBoard.IsBlackShortRookMoved && move.Message.Contains("Black"))
+				else if (!game.GameBoard.IsBlackShortRookMoved && message.Contains("Black"))
 				{
 					game.GameBoard.IsBlackShortRookMoved = true;
 				}
 			}
 			else
 			{
-				if (!game.GameBoard.IsWhiteLongRookMoved && move.Message.Contains("White"))  // daha önce oynanmamış ise
+				if (!game.GameBoard.IsWhiteLongRookMoved && message.Contains("White"))  // daha önce oynanmamış ise
 				{
 					game.GameBoard.IsWhiteLongRookMoved = true;
 				}
-				else if (!game.GameBoard.IsBlackLongRookMoved && move.Message.Contains("Black"))
+				else if (!game.GameBoard.IsBlackLongRookMoved && message.Contains("Black"))
 				{
 					game.GameBoard.IsBlackLongRookMoved = true;
 				}

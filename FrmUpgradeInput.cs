@@ -12,7 +12,6 @@ namespace ChessTable
 {
 	public partial class FrmUpgradeInput : Form
 	{
-		private Label lblMessage;
 		private ComboBox cmbOptions;
 		private Button btnOK;
 
@@ -49,7 +48,6 @@ namespace ChessTable
 			};
 
 			// Add controls to the form
-			Controls.Add(lblMessage);
 			Controls.Add(cmbOptions);
 			Controls.Add(btnOK);
 
