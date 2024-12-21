@@ -36,6 +36,8 @@ namespace ChessTable
 		public FrmGame()
 		{
 			InitializeComponent();
+			this.Height = 700;
+			this.Width = 1600;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace ChessTable
 			InitializeZobrisTable();
 			InitializeGame();
 			MatrixToPanel();
-			dataGridView1.Width = 233;
+			dataGridView1.Width = 173;
 			notationGridView = dataGridView1;
 		}
 
