@@ -61,7 +61,7 @@ namespace ChessTable
 				for (int col = 0; col < 8; col++)
 				{
 					byte piece = m[row, col];
-					if (piece != 0) // Boş kareler atlanır
+					if (piece != 0)
 					{
 						if (piece == 2 || piece == 9)
 						{
@@ -79,9 +79,9 @@ namespace ChessTable
 		private void InitializeZobrisTable()
 		{
 			Random random = new Random();
-			for (int piece = 1; piece <= 14; piece++) // Taş türleri
+			for (int piece = 1; piece <= 14; piece++)
 			{
-				for (int square = 0; square < 8 * 8; square++) // Kareler
+				for (int square = 0; square < 8 * 8; square++)
 				{
 					zobristTable[piece, square] = ((ulong)random.Next() << 32) | (ulong)random.Next();
 				}

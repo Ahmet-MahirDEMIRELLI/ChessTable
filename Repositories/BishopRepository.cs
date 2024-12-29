@@ -181,275 +181,569 @@ namespace ChessTable.Repositories
 			List<Move> possibleMoves = new List<Move>();
 			Move move;
 			byte[,] matrix = board.BoardMatrix;
-			if (threadCheckRepository.IsMovable(board.BoardMatrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite))
+			int type = threadCheckRepository.IsMovable(board.BoardMatrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite);
+			switch (type)
 			{
-				// 4 çapraz kontrol edilecek
-				if (isWhite)
-				{
-					int i = row - 1, j = column - 1;
-					while (i >= 0 && j >= 0)            // sol üst çapraz
+				case 0:
+					// 4 çapraz kontrol edilecek
+					if (isWhite)
 					{
-						if (matrix[i, j] == 0)      // boş kare
+						int i = row - 1, j = column - 1;
+						while (i >= 0 && j >= 0)            // sol üst çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)      // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] >= 8) // rakip taş var 
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = -2;   // taşa çarptıysak gerisine bakamya gerek yok
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;   // taşa çarptıysak gerisine bakamya gerek yok
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j--;
 						}
-						else if (matrix[i, j] <= 7)  // kendi taşı var
-						{
-							i = -2;
-						}
-						i--;
-						j--;
-					}
 
-					i = row - 1;
-					j = column + 1;
-					while (i >= 0 && j <= 7)            // sağ üst çapraz
-					{
-						if (matrix[i, j] == 0)      // boş kare
+						i = row - 1;
+						j = column + 1;
+						while (i >= 0 && j <= 7)            // sağ üst çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)      // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] >= 8) // rakip taş var 
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = -2;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j++;
 						}
-						else if (matrix[i, j] <= 7)  // kendi taşı var
-						{
-							i = -2;
-						}
-						i--;
-						j++;
-					}
 
-					i = row + 1;
-					j = column - 1;
-					while (i <= 7 && j >= 0)            // sol alt çapraz
-					{
-						if (matrix[i, j] == 0)      // boş kare
+						i = row + 1;
+						j = column - 1;
+						while (i <= 7 && j >= 0)            // sol alt çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)      // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] >= 8) // rakip taş var 
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = 9;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j--;
 						}
-						else if (matrix[i, j] <= 7)  // kendi taşı var
-						{
-							i = 9;
-						}
-						i++;
-						j--;
-					}
 
-					i = row + 1;
-					j = column + 1;
-					while (i <= 7 && j <= 7)            // sağ alt çapraz
-					{
-						if (matrix[i, j] == 0)      // boş kare
+						i = row + 1;
+						j = column + 1;
+						while (i <= 7 && j <= 7)            // sağ alt çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)      // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] >= 8) // rakip taş var 
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = 9;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j++;
 						}
-						else if (matrix[i, j] <= 7)  // kendi taşı var
-						{
-							i = 9;
-						}
-						i++;
-						j++;
 					}
-				}
-				else
-				{
-					int i = row - 1, j = column - 1;
-					while (i >= 0 && j >= 0)            // sol üst çapraz
+					else
 					{
-						if (matrix[i, j] == 0)          // boş kare
+						int i = row - 1, j = column - 1;
+						while (i >= 0 && j >= 0)            // sol üst çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)          // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] <= 7)     // rakip taş var
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // rakip taş var
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = -2;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j--;
 						}
-						else if (matrix[i, j] >= 8)  // kendi taşı var
-						{
-							i = -2;
-						}
-						i--;
-						j--;
-					}
 
-					i = row - 1;
-					j = column + 1;
-					while (i >= 0 && j <= 7)            // sağ üst çapraz
-					{
-						if (matrix[i, j] == 0)          // boş kare
+						i = row - 1;
+						j = column + 1;
+						while (i >= 0 && j <= 7)            // sağ üst çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)          // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] <= 7)     // rakip taş var
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // rakip taş var
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = -2;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j++;
 						}
-						else if (matrix[i, j] >= 8)  // kendi taşı var
-						{
-							i = -2;
-						}
-						i--;
-						j++;
-					}
 
-					i = row + 1;
-					j = column - 1;
-					while (i <= 7 && j >= 0)            // sol alt çapraz
-					{
-						if (matrix[i, j] == 0)          // boş kare
+						i = row + 1;
+						j = column - 1;
+						while (i <= 7 && j >= 0)            // sol alt çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)          // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] <= 7)     // taş var
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // taş var
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = 9;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j--;
 						}
-						else if (matrix[i, j] >= 8)  // kendi taşı var
-						{
-							i = 9;
-						}
-						i++;
-						j--;
-					}
 
-					i = row + 1;
-					j = column + 1;
-					while (i <= 7 && j <= 7)            // sağ alt çapraz
-					{
-						if (matrix[i, j] == 0)          // boş kare
+						i = row + 1;
+						j = column + 1;
+						while (i <= 7 && j <= 7)            // sağ alt çapraz
 						{
-							move = new Move()
+							if (matrix[i, j] == 0)          // boş kare
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-						}
-						else if (matrix[i, j] <= 7)     // taş var
-						{
-							move = new Move()
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // taş var
 							{
-								Column = j,
-								Row = i,
-								Message = "",
-							};
-							possibleMoves.Add(move);
-							i = 9;
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j++;
 						}
-						else if (matrix[i, j] >= 8)  // kendi taşı var
-						{
-							i = 9;
-						}
-						i++;
-						j++;
 					}
-				}
+					break;
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+					break;
+				case 5:
+					if (isWhite)
+					{
+						int i = row + 1;
+						int j = column + 1;
+						while (i <= 7 && j <= 7)            // sağ alt çapraz
+						{
+							if (matrix[i, j] == 0)      // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j++;
+						}
+					}
+					else
+					{
+						int i = row + 1;
+						int j = column + 1;
+						while (i <= 7 && j <= 7)            // sağ alt çapraz
+						{
+							if (matrix[i, j] == 0)          // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // taş var
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j++;
+						}
+					}
+					break;
+				case 6:
+					if (isWhite)
+					{
+						int i = row - 1;
+						int j = column + 1;
+						while (i >= 0 && j <= 7)            // sağ üst çapraz
+						{
+							if (matrix[i, j] == 0)      // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j++;
+						}
+					}
+					else
+					{
+						int i = row - 1;
+						int j = column + 1;
+						while (i >= 0 && j <= 7)            // sağ üst çapraz
+						{
+							if (matrix[i, j] == 0)          // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // rakip taş var
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j++;
+						}
+					}
+					break;
+				case 7:
+					if (isWhite)
+					{
+						int i = row - 1, j = column - 1;
+						while (i >= 0 && j >= 0)            // sol üst çapraz
+						{
+							if (matrix[i, j] == 0)      // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;   // taşa çarptıysak gerisine bakamya gerek yok
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j--;
+						}
+					}
+					else
+					{
+						int i = row - 1, j = column - 1;
+						while (i >= 0 && j >= 0)            // sol üst çapraz
+						{
+							if (matrix[i, j] == 0)          // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // rakip taş var
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = -2;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = -2;
+							}
+							i--;
+							j--;
+						}
+					}
+					break;
+				case 8:
+					if (isWhite)
+					{
+						int i = row + 1;
+						int j = column - 1;
+						while (i <= 7 && j >= 0)            // sol alt çapraz
+						{
+							if (matrix[i, j] == 0)      // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] >= 8) // rakip taş var 
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] <= 7)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j--;
+						}
+					}
+					else
+					{
+						int i = row + 1;
+						int j = column - 1;
+						while (i <= 7 && j >= 0)            // sol alt çapraz
+						{
+							if (matrix[i, j] == 0)          // boş kare
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+							}
+							else if (matrix[i, j] <= 7)     // taş var
+							{
+								move = new Move()
+								{
+									Column = j,
+									Row = i,
+									Message = "",
+								};
+								possibleMoves.Add(move);
+								i = 9;
+							}
+							else if (matrix[i, j] >= 8)  // kendi taşı var
+							{
+								i = 9;
+							}
+							i++;
+							j--;
+						}
+					}
+					break;
 			}
 			return possibleMoves;
 		}

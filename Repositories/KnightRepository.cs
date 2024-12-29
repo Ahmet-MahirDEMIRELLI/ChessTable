@@ -182,7 +182,7 @@ namespace ChessTable.Repositories
 			byte[,] matrix = board.BoardMatrix;
 			int[,] squares = { { row - 2, column + 1 }, { row - 1, column + 2 }, { row + 1, column + 2 }, { row + 2, column + 1 }, { row - 2, column - 1 }, { row - 1, column - 2 }, { row + 1, column - 2 }, { row + 2, column - 1 } };
 			// maximum 8 kare var
-			if (threadCheckRepository.IsMovable(matrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite))
+			if (threadCheckRepository.IsMovable(matrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite) == 0)
 			{
 				if (isWhite)
 				{

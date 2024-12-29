@@ -719,7 +719,19 @@ namespace ChessTable.Repositories
 			return false;
 		}
 
-		public bool IsMovable(byte[,] m, int pieceRow, int pieceColumn, int kingRow, int kingCol, bool isWhite)
+		/*
+		 Returns:
+			0 -> Hareket ettirilebilir
+			1 -> Soldan açmazda
+			2 -> Sağdan açmazda
+			3 -> Üstten açmazda
+			4 -> Alttan açmazda
+			5 -> Sağ alttan açmazda
+			6 -> Sağ üstten açmazda
+			7 -> Sol üstten açmazda
+			8 -> Sol alttan açmazda
+		*/
+		public int IsMovable(byte[,] m, int pieceRow, int pieceColumn, int kingRow, int kingCol, bool isWhite)
 		{
 			if (isWhite)
 			{
@@ -727,7 +739,7 @@ namespace ChessTable.Repositories
 				switch (type)
 				{
 					case 0:
-						return true;
+						return 0;
 					case 1:
 						pieceColumn--;
 						while (pieceColumn >= 0)
@@ -736,17 +748,17 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 12 || m[pieceRow, pieceColumn] == 13) // kale veya vezir var
 								{
-									return false;
+									return 1;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceColumn--;
 						}
-						return true; // bir şeye çarpamdan çıktık
+						return 0; // bir şeye çarpamdan çıktık
 					case 2:
 						pieceColumn++;
 						while (pieceColumn <= 7)
@@ -755,17 +767,17 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 12 || m[pieceRow, pieceColumn] == 13) // kale veya vezir var
 								{
-									return false;
+									return 2;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // sağında kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 3:
 						pieceRow--;
 						while (pieceRow >= 0)
@@ -774,17 +786,17 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 12 || m[pieceRow, pieceColumn] == 13) // kale veya vezir var
 								{
-									return false;
+									return 3;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // üstünde kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow--;
 						}
-						return true;
+						return 0;
 					case 4:
 						pieceRow++;
 						while (pieceRow <= 7)
@@ -793,17 +805,17 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 12 || m[pieceRow, pieceColumn] == 13) // kale veya vezir var
 								{
-									return false;
+									return 4;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // altında kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow++;
 						}
-						return true;
+						return 0;
 					case 5:
 						pieceRow++;
 						pieceColumn++;
@@ -813,18 +825,18 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 11 || m[pieceRow, pieceColumn] == 13) // fil veya vezir var
 								{
-									return false;
+									return 5;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // sağ alt çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow++;
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 6:
 						pieceRow--;
 						pieceColumn++;
@@ -834,60 +846,60 @@ namespace ChessTable.Repositories
 							{
 								if (m[pieceRow, pieceColumn] == 11 || m[pieceRow, pieceColumn] == 13) // fil veya vezir var
 								{
-									return false;
+									return 6;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // sağ üst çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow--;
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 7:
 						pieceRow--;
 						pieceColumn--;
 						while (pieceRow >= 0 && pieceColumn >= 0)
 						{
-							if (m[pieceRow, pieceColumn] >= 8)  // sağ üst çaprazda siyah taş var
+							if (m[pieceRow, pieceColumn] >= 8)  // sol üst çaprazda siyah taş var
 							{
 								if (m[pieceRow, pieceColumn] == 11 || m[pieceRow, pieceColumn] == 13) // fil veya vezir var
 								{
-									return false;
+									return 7;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // sağ üst çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow--;
 							pieceColumn--;
 						}
-						return true;
+						return 0;
 					case 8:
 						pieceRow++;
 						pieceColumn--;
 						while (pieceRow <= 7 && pieceColumn >= 0)
 						{
-							if (m[pieceRow, pieceColumn] >= 8)  // sağ üst çaprazda siyah taş var
+							if (m[pieceRow, pieceColumn] >= 8)  // sol alt çaprazda siyah taş var
 							{
 								if (m[pieceRow, pieceColumn] == 11 || m[pieceRow, pieceColumn] == 13) // fil veya vezir var
 								{
-									return false;
+									return 8;
 								}
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // sağ üst çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							pieceRow++;
 							pieceColumn--;
 						}
-						return true;
+						return 0;
 				}
 			}
 			else
@@ -896,83 +908,83 @@ namespace ChessTable.Repositories
 				switch (type)
 				{
 					case 0:
-						return true;
+						return 0;
 					case 1:
 						pieceColumn--;
 						while(pieceColumn >= 0)
 						{
 							if(m[pieceRow, pieceColumn] >= 8)  // solunda kendi taşı taş var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
 								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
 								{
-									return false;
+									return 1;
 								}
-								return true;
+								return 0;
 							}
 							pieceColumn--;
 						}
-						return true; // bir şeye çarpamdan çıktık
+						return 0; // bir şeye çarpamdan çıktık
 					case 2:
 						pieceColumn++;
 						while (pieceColumn <= 7)
 						{
 							if (m[pieceRow, pieceColumn] >= 8)  // sağında kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
 								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
 								{
-									return false;
+									return 2;
 								}
-								return true;
+								return 0;
 							}
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 3:
 						pieceRow--;
 						while (pieceRow >= 0)
 						{
 							if (m[pieceRow, pieceColumn] >= 8)  // üstünde kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
 								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
 								{
-									return false;
+									return 3;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow--;
 						}
-						return true;
+						return 0;
 					case 4:
 						pieceRow++;
 						while (pieceRow <= 7)
 						{
 							if (m[pieceRow, pieceColumn] >= 8)  // altında kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
 								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
 								{
-									return false;
+									return 4;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow++;
 						}
-						return true;
+						return 0;
 					case 5:
 						pieceRow++;
 						pieceColumn++;
@@ -980,20 +992,20 @@ namespace ChessTable.Repositories
 						{
 							if (m[pieceRow, pieceColumn] >= 8)  // sağ alt çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
-								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
+								if (m[pieceRow, pieceColumn] == 4 || m[pieceRow, pieceColumn] == 6) // fil veya vezir var
 								{
-									return false;
+									return 5;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow++;
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 6:
 						pieceRow--;
 						pieceColumn++;
@@ -1001,65 +1013,65 @@ namespace ChessTable.Repositories
 						{
 							if (m[pieceRow, pieceColumn] >= 8)  // sağ üst çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
-								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
+								if (m[pieceRow, pieceColumn] == 4 || m[pieceRow, pieceColumn] == 6) // fil veya vezir var
 								{
-									return false;
+									return 6;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow--;
 							pieceColumn++;
 						}
-						return true;
+						return 0;
 					case 7:
 						pieceRow--;
 						pieceColumn--;
 						while (pieceRow >= 0 && pieceColumn >= 0)
 						{
-							if (m[pieceRow, pieceColumn] >= 8)  // sağ üst çaprazda kendi taşı var
+							if (m[pieceRow, pieceColumn] >= 8)  // sol üst çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
-								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
+								if (m[pieceRow, pieceColumn] == 4 || m[pieceRow, pieceColumn] == 6) // fil veya vezir var
 								{
-									return false;
+									return 7;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow--;
 							pieceColumn--;
 						}
-						return true;
+						return 0;
 					case 8:
 						pieceRow++;
 						pieceColumn--;
 						while (pieceRow <= 7 && pieceColumn >= 0)
 						{
-							if (m[pieceRow, pieceColumn] >= 8)  // sağ üst çaprazda kendi taşı var
+							if (m[pieceRow, pieceColumn] >= 8)  // sol alt çaprazda kendi taşı var
 							{
-								return true;
+								return 0;
 							}
 							else if (m[pieceRow, pieceColumn] != 0 && m[pieceRow, pieceColumn] <= 7)  // solunda beyaz taş var
 							{
-								if (m[pieceRow, pieceColumn] == 5 || m[pieceRow, pieceColumn] == 6) // kale veya vezir var
+								if (m[pieceRow, pieceColumn] == 4 || m[pieceRow, pieceColumn] == 6) // fil veya vezir var
 								{
-									return false;
+									return 8;
 								}
-								return true;
+								return 0;
 							}
 							pieceRow++;
 							pieceColumn--;
 						}
-						return true;
+						return 0;
 				}
 			}
-			return true;  // Buraya hiç bir durumda düşmemesi lazım ama compiler bilmediği için hata veriyor
+			return 0;  // Buraya hiç bir durumda düşmemesi lazım ama compiler bilmediği için hata veriyor
 		}
 
 		/*

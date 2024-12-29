@@ -180,28 +180,52 @@ namespace ChessTable.Repositories
 			List<Move> possibleMoves = new List<Move>();
 			Move move;
 			byte[,] matrix = board.BoardMatrix;
-			if (threadCheckRepository.IsMovable(board.BoardMatrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite))
+			int type = threadCheckRepository.IsMovable(board.BoardMatrix, row, column, isWhite ? board.WhiteKing.Row : board.BlackKing.Row, isWhite ? board.WhiteKing.Col : board.BlackKing.Col, isWhite);
+
+			if (isWhite)
 			{
-				if (isWhite)
+				switch (type)
 				{
-					switch (row)        // özel durumlar
-					{
-						case 6:         // 2 kare ilerleme ihtimali var
-							if (matrix[row - 2, column] == 0 && matrix[row - 1, column] == 0)   // 2 gidebilir mi?
-							{
-								move = new Move()
+					case 0:
+						switch (row)        // özel durumlar
+						{
+							case 6:         // 2 kare ilerleme ihtimali var
+								if (matrix[row - 2, column] == 0 && matrix[row - 1, column] == 0)   // 2 gidebilir mi?
 								{
-									Column = column,
-									Row = row - 2,
-									Message = "",
-								};
-								possibleMoves.Add(move);
-							}
-							break;
-						case 3:         // geçerken al yapma ihtimali var
-							if (column > 0 && column < 7)   // kenar piyonu değil ise doğru koluna girer
-							{
-								if (matrix[row, column - 1] == 9)  // solda 2 sürülmüş siyah piyon
+									move = new Move()
+									{
+										Column = column,
+										Row = row - 2,
+										Message = "",
+									};
+									possibleMoves.Add(move);
+								}
+								break;
+							case 3:         // geçerken al yapma ihtimali var
+								if (column > 0 && column < 7)   // kenar piyonu değil ise doğru koluna girer
+								{
+									if (matrix[row, column - 1] == 9)  // solda 2 sürülmüş siyah piyon
+									{
+										move = new Move()
+										{
+											Column = column - 1,
+											Row = row - 1,
+											Message = $"Enpassant {row},{column - 1}"
+										};
+										possibleMoves.Add(move);
+									}
+									else if (matrix[row, column + 1] == 9)  // sağda 2 sürülmüş siyah piyon
+									{
+										move = new Move()
+										{
+											Column = column + 1,
+											Row = row - 1,
+											Message = $"Enpassant {row},{column + 1}"
+										};
+										possibleMoves.Add(move);
+									}
+								}
+								else if (column == 7 && matrix[row, column - 1] == 9) // solda 2 sürülmüş siyah piyon
 								{
 									move = new Move()
 									{
@@ -211,7 +235,7 @@ namespace ChessTable.Repositories
 									};
 									possibleMoves.Add(move);
 								}
-								else if (matrix[row, column + 1] == 9)  // sağda 2 sürülmüş siyah piyon
+								else if (column == 0 && matrix[row, column + 1] == 9)  // sağda 2 sürülmüş siyah piyon
 								{
 									move = new Move()
 									{
@@ -221,45 +245,54 @@ namespace ChessTable.Repositories
 									};
 									possibleMoves.Add(move);
 								}
-							}
-							else if (column == 7 && matrix[row, column - 1] == 9) // solda 2 sürülmüş siyah piyon
-							{
-								move = new Move()
+								break;
+							case 1:     // Son yataya ulaşma ihtimali var
+								if (matrix[row - 1, column] == 0)
 								{
-									Column = column - 1,
-									Row = row - 1,
-									Message = $"Enpassant {row},{column - 1}"
-								};
-								possibleMoves.Add(move);
-							}
-							else if (column == 0 && matrix[row, column + 1] == 9)  // sağda 2 sürülmüş siyah piyon
-							{
-								move = new Move()
-								{
-									Column = column + 1,
-									Row = row - 1,
-									Message = $"Enpassant {row},{column + 1}"
-								};
-								possibleMoves.Add(move);
-							}
-							break;
-						case 1:     // Son yataya ulaşma ihtimali var
-							if (matrix[row - 1, column] == 0)
+									move = new Move()
+									{
+										Column = column,
+										Row = row - 1,
+										Message = "Upgrade"
+									};
+									possibleMoves.Add(move);
+								}
+								WhiteEatingMoves(possibleMoves, matrix, row, column, true);
+								break;
+						}
+						if (row != 1)       // bu işlemler row=1 için switch içinde yapıldı
+						{
+							if (matrix[row - 1, column] == 0)       // 1 kare ilerleme
 							{
 								move = new Move()
 								{
 									Column = column,
 									Row = row - 1,
-									Message = "Upgrade"
+									Message = ""
 								};
 								possibleMoves.Add(move);
 							}
-							WhiteEatingMoves(possibleMoves, matrix, row, column, true);
-							break;
-					}
-					if (row != 1)       // bu işlemler row=1 için switch içinde yapıldı
-					{
-						if (matrix[row - 1, column] == 0)       // 1 kare ilerleme
+							WhiteEatingMoves(possibleMoves, matrix, row, column, false);
+						}
+						break;
+					case 1:
+					case 2:
+					case 5:
+					case 8:
+						break;
+					case 3:
+					case 4:
+						if (row == 6 && matrix[row - 2, column] == 0 && matrix[row - 1, column] == 0) // 2 kare ilerleme ihtimali var
+						{
+							move = new Move()
+							{
+								Column = column,
+								Row = row - 2,
+								Message = "",
+							};
+							possibleMoves.Add(move);
+						}
+						if (row != 1 && matrix[row - 1, column] == 0)  // 1 kare ilerleme
 						{
 							move = new Move()
 							{
@@ -269,29 +302,77 @@ namespace ChessTable.Repositories
 							};
 							possibleMoves.Add(move);
 						}
-						WhiteEatingMoves(possibleMoves, matrix, row, column, false);
-					}
+						break;
+					case 6:
+						if (matrix[row-1, column+1] >= 8)
+						{
+							move = new Move()
+							{
+								Column = column+1,
+								Row = row - 1,
+								Message = "",
+							};
+							possibleMoves.Add(move);
+						}
+						break;
+					case 7:
+						if (matrix[row - 1, column - 1] >= 8)
+						{
+							move = new Move()
+							{
+								Column = column - 1,
+								Row = row - 1,
+								Message = "",
+							};
+							possibleMoves.Add(move);
+						}
+						break;
 				}
-				else
+			}
+			else
+			{
+				switch (type)
 				{
-					switch (row)        // özel durumlar
-					{
-						case 1:         // 2 kare ilerleme ihtimali var
-							if (matrix[row + 2, column] == 0 && matrix[row + 1, column] == 0)   // 2 gidebilir mi?
-							{
-								move = new Move()
+					case 0:
+						switch (row)        // özel durumlar
+						{
+							case 1:         // 2 kare ilerleme ihtimali var
+								if (matrix[row + 2, column] == 0 && matrix[row + 1, column] == 0)   // 2 gidebilir mi?
 								{
-									Column = column,
-									Row = row + 2,
-									Message = "",
-								};
-								possibleMoves.Add(move);
-							}
-							break;
-						case 4:         // geçerken al yapma ihtimali var
-							if (column > 0 && column < 7)   // kenar piyonu değil ise doğru koluna girer
-							{
-								if (matrix[row, column - 1] == 2)  // solda 2 sürülmüş beyaz piyon (beyaz gözünden sol)
+									move = new Move()
+									{
+										Column = column,
+										Row = row + 2,
+										Message = "",
+									};
+									possibleMoves.Add(move);
+								}
+								break;
+							case 4:         // geçerken al yapma ihtimali var
+								if (column > 0 && column < 7)   // kenar piyonu değil ise doğru koluna girer
+								{
+									if (matrix[row, column - 1] == 2)  // solda 2 sürülmüş beyaz piyon (beyaz gözünden sol)
+									{
+										move = new Move()
+										{
+											Column = column - 1,
+											Row = row + 1,
+											Message = $"Enpassant {row},{column - 1}"
+										};
+										possibleMoves.Add(move);
+									}
+									else if (matrix[row, column + 1] == 2)  // sağda 2 sürülmüş beyaz piyon
+									{
+										move = new Move()
+										{
+											Column = column + 1,
+											Row = row + 1,
+											Message = $"Enpassant {row},{column + 1}"
+										};
+										possibleMoves.Add(move);
+									}
+								}
+								else if (column == 7 && matrix[row, column - 1] == 2) // solda 2 sürülmüş beyaz piyon
 								{
 									move = new Move()
 									{
@@ -301,7 +382,7 @@ namespace ChessTable.Repositories
 									};
 									possibleMoves.Add(move);
 								}
-								else if (matrix[row, column + 1] == 2)  // sağda 2 sürülmüş beyaz piyon
+								else if (column == 0 && matrix[row, column + 1] == 2)  // sağda 2 sürülmüş beyazsiyah piyon
 								{
 									move = new Move()
 									{
@@ -311,45 +392,55 @@ namespace ChessTable.Repositories
 									};
 									possibleMoves.Add(move);
 								}
-							}
-							else if (column == 7 && matrix[row, column - 1] == 2) // solda 2 sürülmüş beyaz piyon
-							{
-								move = new Move()
+								break;
+							case 6:     // Son yataya ulaşma ihtimali var
+								if (matrix[row + 1, column] == 0)
 								{
-									Column = column - 1,
-									Row = row + 1,
-									Message = $"Enpassant {row},{column - 1}"
-								};
-								possibleMoves.Add(move);
-							}
-							else if (column == 0 && matrix[row, column + 1] == 2)  // sağda 2 sürülmüş beyazsiyah piyon
-							{
-								move = new Move()
-								{
-									Column = column + 1,
-									Row = row + 1,
-									Message = $"Enpassant {row},{column + 1}"
-								};
-								possibleMoves.Add(move);
-							}
-							break;
-						case 6:     // Son yataya ulaşma ihtimali var
-							if (matrix[row + 1, column] == 0)
+									move = new Move()
+									{
+										Column = column,
+										Row = row + 1,
+										Message = "Upgrade"
+									};
+									possibleMoves.Add(move);
+								}
+								BlackEatingMoves(possibleMoves, matrix, row, column, true);
+								break;
+						}
+						if (row != 6)       // bu işlemler row=6 için switch içinde yapıldı
+						{
+							if (matrix[row + 1, column] == 0)       // 1 kare ilerleme
 							{
 								move = new Move()
 								{
 									Column = column,
 									Row = row + 1,
-									Message = "Upgrade"
+									Message = ""
 								};
 								possibleMoves.Add(move);
 							}
-							BlackEatingMoves(possibleMoves, matrix, row, column, true);
-							break;
-					}
-					if (row != 6)       // bu işlemler row=6 için switch içinde yapıldı
-					{
-						if (matrix[row + 1, column] == 0)       // 1 kare ilerleme
+							BlackEatingMoves(possibleMoves, matrix, row, column, false);
+						}
+						break;
+					case 1:
+					case 2:
+					case 6:
+					case 7:
+						break;
+					case 3:
+					case 4:
+						if (row == 1 && matrix[row + 2, column] == 0 && matrix[row + 1, column] == 0)
+						{
+							move = new Move()
+							{
+								Column = column,
+								Row = row + 2,
+								Message = "",
+							};
+							possibleMoves.Add(move);
+						}
+
+						if (row != 6 && matrix[row + 1, column] == 0)
 						{
 							move = new Move()
 							{
@@ -359,10 +450,33 @@ namespace ChessTable.Repositories
 							};
 							possibleMoves.Add(move);
 						}
-						BlackEatingMoves(possibleMoves, matrix, row, column, false);
-					}
+						break;
+					case 5:
+						if (matrix[row+1, column+1] != 0 && matrix[row + 1, column + 1] < 8)
+						{
+							move = new Move()
+							{
+								Column = column+1,
+								Row = row + 1,
+								Message = ""
+							};
+							possibleMoves.Add(move);
+						}
+						break;
+					case 8:
+						if (matrix[row + 1, column - 1] != 0 && matrix[row + 1, column - 1] < 8)
+						{
+							move = new Move()
+							{
+								Column = column - 1,
+								Row = row + 1,
+								Message = ""
+							};
+							possibleMoves.Add(move);
+						}
+						break;
 				}
-			}
+			}			
 			return possibleMoves;
 		}
 		private void WhiteEatingMoves(List<Move> moveList, byte[,] matrix, int row, int column, bool isUpgrade)
